@@ -1,0 +1,225 @@
+﻿<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- BREADCRUMB-->
+<section class="au-breadcrumb m-t-75">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="au-breadcrumb-content">
+                        <div class="au-breadcrumb-left">
+                            <span class="au-breadcrumb-span">You are here:</span>
+                            <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                <li class="list-inline-item active">
+                                    <a href="#">Home</a>
+                                </li>
+                                <li class="list-inline-item seprate">
+                                    <span>/</span>
+                                </li>
+                                <li class="list-inline-item">Employee</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END BREADCRUMB-->
+<section>
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12">
+                    <nav>
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Permanent</a>
+                            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Contract</a>
+                            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Probation</a>
+                        </div>
+                    </nav>
+                    <!-- DATA TABLE -->
+                    <div class="tab-content" id="nav-tabContent">
+                        <h3 class="title-5 m-b-35 p-t-30">data table</h3>
+                        <div class="table-data__tool">
+                            <div class="table-data__tool-left">
+                                <div class="rs-select2--light rs-select2--sm">
+                                    <div class="rs-select2--light rs-select2--sm">
+                                        <input class="js-select2" id="myInput" type="text" placeholder="Search..">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-data__tool-right">
+                                <a asp-controller="Employee" asp-action="Add" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                    <i class="zmdi zmdi-plus"></i>add new employee
+                                </a>
+                            </div>
+                        </div>
+                        <div class="table-responsive table-responsive-data2 tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <table class="table table-data2">
+                                <thead>
+                                    <tr>
+                                        <th>image</th>
+                                        <th>name</th>
+                                        <th>email</th>
+                                        <th>phone</th>
+                                        <th>position</th>
+                                        <th>division</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="myTable">
+                                    @{
+                                        @foreach (var permanent in ViewBag.Permanent)
+                                        {
+                                            <tr class="tr-shadow">
+                                                <td><img src="@permanent.Photo" width="50" height="50"/></td>
+                                                <td>
+                                                    @permanent.Fullname
+                                                </td>
+                                                <td class="desc">@permanent.Email</td>
+                                                <td>@permanent.Phone_number</td>
+                                                <td>
+                                                    @permanent.Position
+                                                </td>
+                                                <td>@permanent.Division</td>
+                                                <td>
+                                                    <div class="table-data-feature">
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                                            <i class="zmdi zmdi-mail-send"></i>
+                                                        </button>
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                            <i class="zmdi zmdi-edit"></i>
+                                                        </button>
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                            <i class="zmdi zmdi-delete"></i>
+                                                        </button>
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="More">
+                                                            <i class="zmdi zmdi-more"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive table-responsive-data2 tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <table class="table table-data2">
+                                <thead>
+                                    <tr>
+                                        <th>image</th>
+                                        <th>name</th>
+                                        <th>email</th>
+                                        <th>phone</th>
+                                        <th>position</th>
+                                        <th>division</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="myTable">
+                                    @{
+                                        @foreach (var permanent in ViewBag.Contract)
+                                        {
+                                            <tr class="tr-shadow">
+                                                <td><img src="@permanent.Photo" width="50" height="50" /></td>
+                                                <td>
+                                                    @permanent.Fullname
+                                                </td>
+                                                <td class="desc">@permanent.Email</td>
+                                                <td>@permanent.Phone_number</td>
+                                                <td>
+                                                    @permanent.Position
+                                                </td>
+                                                <td>@permanent.Division</td>
+                                                <td>
+                                                    <div class="table-data-feature">
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                                            <i class="zmdi zmdi-mail-send"></i>
+                                                        </button>
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                            <i class="zmdi zmdi-edit"></i>
+                                                        </button>
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                            <i class="zmdi zmdi-delete"></i>
+                                                        </button>
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="More">
+                                                            <i class="zmdi zmdi-more"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive table-responsive-data2 tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <table class="table table-data2">
+                                <thead>
+                                    <tr>
+                                        <th>image</th>
+                                        <th>name</th>
+                                        <th>email</th>
+                                        <th>phone</th>
+                                        <th>position</th>
+                                        <th>division</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="myTable">
+                                    @{
+                                        @foreach (var permanent in ViewBag.Probation)
+                                        {
+                                            <tr class="tr-shadow">
+                                                <td><img src="@permanent.Photo" width="50" height="50" /></td>
+                                                <td>
+                                                    @permanent.Fullname
+                                                </td>
+                                                <td class="desc">@permanent.Email</td>
+                                                <td>@permanent.Phone_number</td>
+                                                <td>
+                                                    @permanent.Position
+                                                </td>
+                                                <td>@permanent.Division</td>
+                                                <td>
+                                                    <div class="table-data-feature">
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                                            <i class="zmdi zmdi-mail-send"></i>
+                                                        </button>
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" data-id=@permanent.Id title="Edit">
+                                                            <i class="zmdi zmdi-edit"></i>
+                                                        </button>
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" data-id=@permanent.Id title="Delete">
+                                                            <i class="zmdi zmdi-delete"></i>
+                                                        </button>
+                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="More">
+                                                            <i class="zmdi zmdi-more"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- END DATA TABLE -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
