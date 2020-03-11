@@ -1,0 +1,151 @@
+﻿<section class="au-breadcrumb m-t-75">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="au-breadcrumb-content">
+                        <div class="au-breadcrumb-left">
+                            <span class="au-breadcrumb-span">You are here:</span>
+                            <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                <li class="list-inline-item active">
+                                    <a href="#">Home</a>
+                                </li>
+                                <li class="list-inline-item seprate">
+                                    <span>/</span>
+                                </li>
+                                <li class="list-inline-item">Attendance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="section__content section__content--p30">
+        <button class="au-btn au-btn-icon au-btn--green au-btn--small" id="dele_btn-" data-toggle="modal" data-target="#contact-modal" data-placement="top" title="Delete">
+            <i class="zmdi zmdi-delete"></i>Clock In
+        </button>
+        <button class="au-btn au-btn-icon au-btn--green au-btn--small" id="dele_btn-" data-toggle="modal" data-target="#clockout-modal" data-placement="top" title="Delete">
+            <i class="zmdi zmdi-delete"></i>Clock Out
+        </button>
+        <div class="container-fluid p-t-30">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="table-responsive table--no-card m-b-30">
+                        <table class="table table-borderless table-striped table-earning">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    @foreach (var emp in ViewBag.Emp)
+                                    {
+                                        <tr>
+                                            <td><a href="https://192.168.17.39:5001/Attendance/Attendance/@emp.Id">@emp.Fullname</a></td>
+                                      
+                                        </tr>
+
+                                     }
+                                  }
+                             </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="contact-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Clock IN</h3>
+            </div>
+            <form asp-action="Clockin" asp-controller="Attendance" method="post" id="contactForm" name="contact" role="form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="rating">Rating</label>
+                        <select name="EmployeeId" class="form-control">
+                            @{
+                                @foreach (var y in ViewBag.Emp)
+                                {
+                                    <option value=@y.Id>@y.Fullname</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="datetime-local" name="clockin" />
+                    </div>                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-success" id="submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="clockout-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Clock Out</h3>
+            </div>
+            <form asp-action="Clockin" asp-controller="Attendance" method="post" id="contactForm" name="contact" role="form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="rating">Rating</label>
+                        <select name="EmployeeId" class="form-control">
+                            @{
+                                @foreach (var y in ViewBag.Emp)
+                                {
+                                    <option value=@y.Id>@y.Fullname</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="datetime-local" name="clockout" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-success" id="submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="clockout-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Clock Out</h3>
+            </div>
+            <form asp-action="Attendance" asp-controller="Attendance" method="get" id="contactForm" name="contact" role="form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="rating">Rating</label>
+                        <select name="EmployeeId" class="form-control">
+                            @{
+                                @foreach (var y in ViewBag.Emp)
+                                {
+                                    <option value=@y.Id>@y.Fullname</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-success" id="submit">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

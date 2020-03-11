@@ -54,7 +54,7 @@
                 <nav class="navbar-sidebar2">
                     <ul class="list-unstyled navbar__list">
                         <li class="active has-sub">
-                            <a class="js-arrow" href="#">
+                            <a asp-controller="Home" asp-action="Index">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard
                             </a>
                         </li>
@@ -62,33 +62,32 @@
                             <a asp-controller="Employee" asp-action="Index">
                                 <i class="fas fa-chart-bar"></i>Employee
                             </a>
-                           
+
                         </li>
                         <li>
-                            <a href="#">
+                            <a asp-controller="Attendance" asp-action="Index">
                                 <i class="fas fa-shopping-basket"></i>Attendances
                             </a>
                         </li>
                         <li class="has-sub">
-                            <a class="js-arrow" href="#">
+                            <a asp-controller="Applicant" asp-action="Index">
                                 <i class="fas fa-trophy"></i>Applicants
-                                
+
                             </a>
-                           
+
                         </li>
                         <li class="has-sub">
-                            <a class="js-arrow" href="#">
+                            <a asp-controller="LeaveRequest" asp-action="Index">
                                 <i class="fas fa-copy"></i>Leave Request
-                                
+
                             </a>
-                            
+
                         </li>
                         <li class="has-sub">
-                            <a class="js-arrow" href="#">
+                            <a asp-controller="Broadcast" asp-action="Index">
                                 <i class="fas fa-desktop"></i>Broadcast
-                                
                             </a>
-                            
+
                         </li>
                     </ul>
                 </nav>
@@ -120,40 +119,25 @@
                                     </div>
                                 </div>
                                 <div class="header-button-item has-noti js-item-menu">
-                                    <i class="zmdi zmdi-notifications"></i>
+                                    @{
+                                        ViewBag.Notif = ViewData["Notif"];
+                                        if (ViewBag.Notif != 0)
+                                        {
+                                            <i id="notif" class="zmdi zmdi-notifications-active" onclick="openForm()"></i>
+                                            <i id="notif2" class="zmdi zmdi-notifications-off" hidden></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="zmdi zmdi-notifications-off"></i>
+                                        }
+
+                                    }
                                     <div class="notifi-dropdown js-dropdown">
                                         <div class="notifi__title">
-                                            <p>You have 3 Notifications</p>
-                                        </div>
-                                        <div class="notifi__item">
-                                            <div class="bg-c1 img-cir img-40">
-                                                <i class="zmdi zmdi-email-open"></i>
-                                            </div>
-                                            <div class="content">
-                                                <p>You got a email notification</p>
-                                                <span class="date">April 12, 2018 06:50</span>
-                                            </div>
-                                        </div>
-                                        <div class="notifi__item">
-                                            <div class="bg-c2 img-cir img-40">
-                                                <i class="zmdi zmdi-account-box"></i>
-                                            </div>
-                                            <div class="content">
-                                                <p>Your account has been blocked</p>
-                                                <span class="date">April 12, 2018 06:50</span>
-                                            </div>
-                                        </div>
-                                        <div class="notifi__item">
-                                            <div class="bg-c3 img-cir img-40">
-                                                <i class="zmdi zmdi-file-text"></i>
-                                            </div>
-                                            <div class="content">
-                                                <p>You got a new file</p>
-                                                <span class="date">April 12, 2018 06:50</span>
-                                            </div>
-                                        </div>
-                                        <div class="notifi__footer">
-                                            <a href="#">All notifications</a>
+                                            @{
+                                                ViewBag.Notif = ViewData["Notif"];
+                                                <p>You have @ViewBag.Notif Leave Request</p>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -163,43 +147,11 @@
                                 <div class="setting-menu js-right-sidebar d-none d-lg-block">
                                     <div class="account-dropdown__body">
                                         <div class="account-dropdown__item">
-                                            <a href="#">
-                                                <i class="zmdi zmdi-account"></i>Account
+                                            <a asp-controller="Event" asp-action="Index">
+                                                <i class="zmdi zmdi-calendar"></i>Event
                                             </a>
-                                        </div>
-                                        <div class="account-dropdown__item">
-                                            <a href="#">
-                                                <i class="zmdi zmdi-settings"></i>Setting
-                                            </a>
-                                        </div>
-                                        <div class="account-dropdown__item">
-                                            <a href="#">
-                                                <i class="zmdi zmdi-money-box"></i>Billing
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="account-dropdown__body">
-                                        <div class="account-dropdown__item">
-                                            <a href="#">
-                                                <i class="zmdi zmdi-globe"></i>Language
-                                            </a>
-                                        </div>
-                                        <div class="account-dropdown__item">
-                                            <a href="#">
-                                                <i class="zmdi zmdi-pin"></i>Location
-                                            </a>
-                                        </div>
-                                        <div class="account-dropdown__item">
-                                            <a href="#">
-                                                <i class="zmdi zmdi-email"></i>Email
-                                            </a>
-                                        </div>
-                                        <div class="account-dropdown__item">
-                                            <a href="#">
-                                                <i class="zmdi zmdi-notifications"></i>Notifications
-                                            </a>
-                                        </div>
-                                    </div>
+                                        </div>                                        
+                                    </div>                                    
                                 </div>
                             </div>
                         </div>
@@ -422,6 +374,24 @@
     <!-- Main JS-->
     <script src="~/admin/js/main.js"></script>
     @RenderSection("Scripts", required: false)
+
+    <script type="text/javascript">
+        function openForm() {
+            $.ajax
+                ({
+                    type: 'GET',
+                    url: '/LeaveRequest/UpdateNotif',
+                    contentType: 'application/json; charset =utf-8',
+                    success: function (data) {
+                        $("#notif").attr("hidden", true);
+                        $("#notif2").attr("hidden",false);
+                    },
+                    error: function (result) {
+                        alert("Error Occured, Try Again");
+                    }
+                });
+        }
+    </script>
 </body>
 
 </html>

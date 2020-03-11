@@ -13,6 +13,9 @@ namespace HRApplication.Data
         public DbSet<Employe> Employee { get; set; }
         public DbSet<Attendance> Attendance { get; set; }
         public DbSet<User> User { get; set; }
+        public DbSet<Notification> Notification { get; set; }
+        public DbSet<LeaveRequest> LeaveRequest { get; set; }
+        public DbSet<Event> Event { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
         {

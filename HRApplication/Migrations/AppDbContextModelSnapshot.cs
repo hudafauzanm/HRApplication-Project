@@ -34,6 +34,9 @@ namespace HRApplication.Migrations
                     b.Property<string>("Birthplace")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CV")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Created_at")
                         .HasColumnType("datetime2");
 
@@ -149,6 +152,78 @@ namespace HRApplication.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employee");
+                });
+
+            modelBuilder.Entity("HRApplication.Models.Event", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created_At")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EventName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeEvent")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Event");
+                });
+
+            modelBuilder.Entity("HRApplication.Models.LeaveRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created_at")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LeaveTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Read_at")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveRequest");
+                });
+
+            modelBuilder.Entity("HRApplication.Models.Notification", b =>
+                {
+                    b.Property<Guid>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("created_at")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("read_at")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("role_id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("sender_id")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("HRApplication.Models.User", b =>

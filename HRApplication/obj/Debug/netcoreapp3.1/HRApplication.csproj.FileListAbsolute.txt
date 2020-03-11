@@ -150,3 +150,14 @@ D:\Users\bsi50128\source\repos\HRApplication\HRApplication\bin\Debug\netcoreapp3
 D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\HRApplication.MvcApplicationPartsAssemblyInfo.cache
 D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Employee\Employee.cshtml.g.cs
 D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Employee\AddEmployee.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Employee\EditEmployee.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Attendance\Attendance.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Attendance\EmployeeAttendance.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Applicant\Applicant.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Applicant\AddApplicant.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Applicant\EditApplicant.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Broadcast\Broadcast.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\LeaveRequest\LeaveRequest.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\bin\Debug\netcoreapp3.1\libman.json
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\AddEvent.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Event\AddEvent.cshtml.g.cs

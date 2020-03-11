@@ -2,18 +2,44 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HRApplication.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace HRApplication.Controllers
 {
     public class HomeController : Controller
     {
+        public IConfiguration Configuration;
+        public AppDbContext AppDbContext { get; set; }
+
+        public HomeController(IConfiguration configuration, AppDbContext appDbContext)
+        {
+            AppDbContext = appDbContext;
+            Configuration = configuration;
+        }
         // GET: Home
         [Authorize]
         public ActionResult Index()
         {
+            var employee = (from x in AppDbContext.Employee select x).Count();
+            var emppria = (from x in AppDbContext.Employee where x.Gender == 1 select x).Count();
+            var empwanita = (from x in AppDbContext.Employee where x.Gender == 2 select x).Count();
+            var notif = (from e in AppDbContext.LeaveRequest where e.Read_at == DateTime.Parse("0001-01-01 00:00:00.0000000") select e).Count();
+            var outs = (from e in AppDbContext.LeaveRequest where e.LeaveTime.Date == DateTime.Today.Date && e.Status == "approve" select e).Count();
+            var attendance = (from e in AppDbContext.Attendance where e.Created_at == DateTime.Today.Date select e).Count();
+            var applicant = from x in AppDbContext.Applicant where x.Status.Contains("unprocessed") select x;
+            var eventual = from x in AppDbContext.Event where x.TimeEvent.Year == DateTime.Today.Year orderby x.TimeEvent ascending select x;
+            ViewBag.Event = eventual;
+            ViewBag.Appl = applicant;
+            ViewBag.Out = outs;
+            ViewBag.Att = attendance;
+            ViewBag.Pria = emppria;
+            ViewBag.Wanita = empwanita;
+            ViewBag.Emp = employee;
+            ViewBag.Notif = notif;
             return View("Index");
         }
 

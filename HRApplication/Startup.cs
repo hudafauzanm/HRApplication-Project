@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HRApplication.Data;
+using HRApplication.Scheduler;
+using HRApplication.SignalR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,7 +37,7 @@ namespace HRApplication
                 options.IdleTimeout = TimeSpan.FromMinutes(60);
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-
+            services.AddSingleton<IHostedService, Birthdays>();
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -61,6 +63,7 @@ namespace HRApplication
                     ValidateAudience = false,
                 };
             });
+            services.AddSignalR();
             services.AddControllersWithViews();
         }
 
@@ -105,6 +108,8 @@ namespace HRApplication
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Login}/{action=Index}/{id?}");
+
+                endpoints.MapHub<LeaveHub>("/leaveHub");
             });
         }
     }

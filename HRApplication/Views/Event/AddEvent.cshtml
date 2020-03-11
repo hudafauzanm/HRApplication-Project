@@ -1,0 +1,52 @@
+﻿<div class="main-content">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Event</strong> Add
+                        </div>
+                        <div class="card-body card-block">
+                            <form method="post" enctype="multipart/form-data" class="form-vertical">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">
+                                                    <label class=" form-control-label">Event Name</label>
+                                                </div>
+                                                <div class="col-12 col-md-9">
+                                                    <input type="text" id="Eventname" name="Eventname" placeholder="Eventname" class="form-control">
+                                                </div>
+                                            </div>                                            
+                                            <div class="row form-group">
+                                                <div class="col col-md-3">
+                                                    <label for="password-input" class=" form-control-label">Event Date</label>
+                                                </div>
+                                                <div class="col-12 col-md-9">
+                                                    <input type="date" id="Eventdate" name="Eventdate" class="form-control">
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button asp-controller="Event" asp-action="Create" type="submit" class="btn btn-primary btn-sm">
+                                        <i class="fa fa-dot-circle-o"></i> Submit
+                                    </button>
+                                    <button type="reset" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-ban"></i> Reset
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

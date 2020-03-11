@@ -23,6 +23,7 @@ namespace HRApplication.Models
         public string Division { get; set; }
         public string Phone_number { get; set; }
         public string Photo { get; set; }
+        public string CV { get; set; }
         public string _emergencyContact { get; set; }
         public string Status { get; set; }
         public DateTime Created_at { get; set; }

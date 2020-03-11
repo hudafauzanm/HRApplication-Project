@@ -45,22 +45,51 @@
                                 <div class="rs-select2--light rs-select2--sm">
                                     <div class="rs-select2--light rs-select2--sm">
                                         <input class="js-select2" id="myInput" type="text" placeholder="Search..">
+                                        <button id="myBtn">Export</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="table-data__tool-right">
-                                <a asp-controller="Employee" asp-action="Add" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                <a asp-controller="Employee" asp-action="Add" class="au-btn au-btn--green au-btn--small">
                                     <i class="zmdi zmdi-plus"></i>add new employee
                                 </a>
                             </div>
+                            <div class="table-data__tool-right">
+                                <a asp-controller="Employee" asp-action="ExportAll" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                    <i class="zmdi zmdi-case-download"></i>Export CSV (All)
+                                </a>
+                            </div>
+                            <div class="table-data__tool-right">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Export
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href=" https://localhost:5001/Employee/Export?status=Permanent">Permanent</a>
+                                        <a class="dropdown-item" href=" https://localhost:5001/Employee/Export?status=Contract">Contract</a>
+                                        <a class="dropdown-item" href=" https://localhost:5001/Employee/Export?status=Probation">Probation</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-data__tool-right">
+                                <a  href=" https://localhost:5001/Employee/ImportTemp" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                    <i class="zmdi zmdi-case-download"></i>Template
+                                </a>
+                            </div>
+                            <div class="table-data__tool-right">
+                                <form asp-action="Import" asp-controller="Employee" method="post" enctype="multipart/form-data" >
+                                    <input type="file" name="Upload" value="Upload">
+                                    <button type="submit" class="btn btn-success">Import</button>
+                                </form>
+                            </div>
                         </div>
                         <div class="table-responsive table-responsive-data2 tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                            <table class="table table-data2">
+                            <table id="permanent_table" class="table table-data2">
                                 <thead>
                                     <tr>
                                         <th>image</th>
-                                        <th>name</th>
-                                        <th>email</th>
+                                        <th onclick="sortTable(0)">name</th>
+                                        <th onclick="sortTable(0)">email</th>
                                         <th>phone</th>
                                         <th>position</th>
                                         <th>division</th>
@@ -72,7 +101,7 @@
                                         @foreach (var permanent in ViewBag.Permanent)
                                         {
                                             <tr class="tr-shadow">
-                                                <td><img src="@permanent.Photo" width="50" height="50"/></td>
+                                                <td><img src="@permanent.Photo" width="50" height="50" /></td>
                                                 <td>
                                                     @permanent.Fullname
                                                 </td>
@@ -87,10 +116,10 @@
                                                         <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
                                                             <i class="zmdi zmdi-mail-send"></i>
                                                         </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                        <button type="submit" id="edit_btn-@permanent.Id" class="item" data-toggle="tooltip" data-placement="top" onclick="javascript: edit_emp(this)" data-id=@permanent.Id title="Edit">
                                                             <i class="zmdi zmdi-edit"></i>
                                                         </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                        <button class="item" id="dele_btn-@permanent.Id" data-toggle="modal" data-target="#delete-modal" onclick="javascript: delete_id(this)" data-placement="top" data-id=@permanent.Id title="Delete">
                                                             <i class="zmdi zmdi-delete"></i>
                                                         </button>
                                                         <button class="item" data-toggle="tooltip" data-placement="top" title="More">
@@ -105,7 +134,7 @@
                             </table>
                         </div>
                         <div class="table-responsive table-responsive-data2 tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-home-tab">
-                            <table class="table table-data2">
+                            <table id="contract_table" class="table table-data2">
                                 <thead>
                                     <tr>
                                         <th>image</th>
@@ -137,10 +166,10 @@
                                                         <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
                                                             <i class="zmdi zmdi-mail-send"></i>
                                                         </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                        <button type="submit" id="edit_btn-@permanent.Id" class="item" data-toggle="tooltip" data-placement="top" onclick="javascript: edit_emp(this)" data-id=@permanent.Id title="Edit">
                                                             <i class="zmdi zmdi-edit"></i>
                                                         </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                        <button class="item" id="dele_btn-@permanent.Id" data-toggle="modal" data-target="#delete-modal" onclick="javascript: delete_id(this)" data-placement="top" data-id=@permanent.Id title="Delete">
                                                             <i class="zmdi zmdi-delete"></i>
                                                         </button>
                                                         <button class="item" data-toggle="tooltip" data-placement="top" title="More">
@@ -155,7 +184,7 @@
                             </table>
                         </div>
                         <div class="table-responsive table-responsive-data2 tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-home-tab">
-                            <table class="table table-data2">
+                            <table id="probation_table" class="table table-data2">
                                 <thead>
                                     <tr>
                                         <th>image</th>
@@ -187,10 +216,10 @@
                                                         <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
                                                             <i class="zmdi zmdi-mail-send"></i>
                                                         </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" data-id=@permanent.Id title="Edit">
+                                                        <button type="submit" id="edit_btn-@permanent.Id" class="item" data-toggle="tooltip" data-placement="top" onclick="javascript: edit_emp(this)" data-id=@permanent.Id title="Edit">
                                                             <i class="zmdi zmdi-edit"></i>
                                                         </button>
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" data-id=@permanent.Id title="Delete">
+                                                        <button class="item" id="dele_btn-@permanent.Id" data-toggle="modal" data-target="#delete-modal" onclick="javascript: delete_id(this)" data-placement="top" data-id=@permanent.Id title="Delete">
                                                             <i class="zmdi zmdi-delete"></i>
                                                         </button>
                                                         <button class="item" data-toggle="tooltip" data-placement="top" title="More">
@@ -205,14 +234,38 @@
                             </table>
                         </div>
                     </div>
-                    
+
                     <!-- END DATA TABLE -->
                 </div>
             </div>
         </div>
     </div>
 </section>
+<div id="delete-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Article</h3>
+            </div>
+            <form method="post" role="form">
+                <div class="modal-body">
+                    Apakah orang ini sudah resign?
+                    <input type="text" name="deleteid" id="deleteid" hidden>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input asp-controller="Employee" asp-action="Delete" type="submit" class="btn btn-success">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/addons/datatables.min.js"></script>
+<link href="css/addons/datatables.min.css" rel="stylesheet">
 <script>
     $(document).ready(function () {
         $("#myInput").on("keyup", function () {
@@ -222,4 +275,179 @@
             });
         });
     });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#myBtn").click(function(){
+        var str = $("#myInput").val();
+        var path = "https://localhost:5001/Employee/Export?Search=" + str;
+        window.location.href = path;
+        });
+    });
+</script>
+<script type="text/javascript">
+    function edit_emp(id) {
+        var emp_id = id.id;
+        var emp = emp_id.substring(9);
+        var path = "https://localhost:5001/Employee/Edit/" + emp;
+        window.location.href = path;
+    };
+</script>
+<script type="text/javascript">
+    function delete_id(id) {
+        var emp_id = id.id;
+        var emp = emp_id.substring(9);
+        console.log(emp);
+        document.getElementById("deleteid").value = emp;
+    };
+</script>
+<script>
+    $(document).ready(function(){
+    $('#permanent_table').after('<div id="nav"></div>');
+    var rowsShown = 2;
+    var rowsTotal = $('#permanent_table tbody tr').length;
+    var numPages = rowsTotal/rowsShown;
+    for(i = 0;i < numPages;i++) {
+        var pageNum = i + 1;
+        $('#nav').append('<a href="#" rel="'+i+'">'+pageNum+'</a> ');
+    }
+    $('#permanent_table tbody tr').hide();
+    $('#permanent_table tbody tr').slice(0, rowsShown).show();
+    $('#nav a:first').addClass('active');
+    $('#nav a').bind('click', function(){
+
+        $('#nav a').removeClass('active');
+        $(this).addClass('active');
+        var currPage = $(this).attr('rel');
+        var startItem = currPage * rowsShown;
+        var endItem = startItem + rowsShown;
+        $('#permanent_table tbody tr').css('opacity','0.0').hide().slice(startItem, endItem).
+        css('display','table-row').animate({opacity:1}, 300);
+    });
+});
+</script>
+<script>
+    $(document).ready(function () {
+        $('#contract_table').after('<div id="nav"></div>');
+        var rowsShown = 2;
+        var rowsTotal = $('#contract_table tbody tr').length;
+        var numPages = rowsTotal / rowsShown;
+        for (i = 0; i < numPages; i++) {
+            var pageNum = i + 1;
+            $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
+        }
+        $('#contract_table tbody tr').hide();
+        $('#contract_table tbody tr').slice(0, rowsShown).show();
+        $('#nav a:first').addClass('active');
+        $('#nav a').bind('click', function () {
+
+            $('#nav a').removeClass('active');
+            $(this).addClass('active');
+            var currPage = $(this).attr('rel');
+            var startItem = currPage * rowsShown;
+            var endItem = startItem + rowsShown;
+            $('#contract_table tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                css('display', 'table-row').animate({ opacity: 1 }, 300);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#probation_table').after('<div id="nav"></div>');
+        var rowsShown = 2;
+        var rowsTotal = $('#probation_table tbody tr').length;
+        var numPages = rowsTotal / rowsShown;
+        for (i = 0; i < numPages; i++) {
+            var pageNum = i + 1;
+            $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
+        }
+        $('#probation_table tbody tr').hide();
+        $('#probation_table tbody tr').slice(0, rowsShown).show();
+        $('#nav a:first').addClass('active');
+        $('#nav a').bind('click', function () {
+
+            $('#nav a').removeClass('active');
+            $(this).addClass('active');
+            var currPage = $(this).attr('rel');
+            var startItem = currPage * rowsShown;
+            var endItem = startItem + rowsShown;
+            $('#probation_table tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                css('display', 'table-row').animate({ opacity: 1 }, 300);
+        });
+    });
+</script>
+<script>
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("permanent_table");
+        switching = true;
+
+        dir = "asc";
+      
+        while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*Get the two elements you want to compare,
+                one from current row and one from the next:*/
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /*check if the two rows should switch place,
+                based on the direction, asc or desc:*/
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                and mark that a switch has been done:*/
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                //Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /*If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again.*/
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
+<script>
+    $(".au-btn-icon").click(
+    function(e) {   
+        e.preventDefault();
+        window.open( $(this).attr("href") );
+        window.location="https://localhost:5001/Employee";
+        window.focus();
+    }
+);
+</script>
+<script>
+    $(".dropdown-item").click(
+        function (e) {
+            e.preventDefault();
+            window.open($(this).attr("href"));
+            window.location = "https://localhost:5001/Employee";
+            window.focus();
+        }
+    );
 </script>
