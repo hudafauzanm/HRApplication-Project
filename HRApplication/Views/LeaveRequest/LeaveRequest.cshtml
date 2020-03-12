@@ -30,9 +30,9 @@
 </section>
 <!-- END BREADCRUMB-->
 <section>
-    <div class="section__content section__content--p30">
+    <div class="section__content">
 
-        <div class="container-fluid">
+        <div class="container-fluid" style="padding-left:2px;padding-right:2px">
             <div class="row">
                 <div class="col-xl-12">
                     <nav>
@@ -44,13 +44,12 @@
                     </nav>
                     <!-- DATA TABLE -->
                     <div class="tab-content" id="nav-tabContent">
-                        <h3 class="title-5 m-b-35 p-t-30">data table</h3>
-                        <div class="table-data__tool">
-                            <div class="table-data__tool-left">
+                        <div class="table-data__tool p-t-10">
+                            <div class="table-data__tool-right">
                                 <div class="rs-select2--light rs-select2--sm">
                                     <div class="rs-select2--light rs-select2--sm">
                                         <input class="js-select2" id="myInput" type="text" placeholder="Search..">
-                                        <button id="myBtn">Export</button>
+                                        <button class="btn btn-secondary" id="myBtn">Export</button>
                                     </div>
                                 </div>
                             </div>
@@ -59,8 +58,7 @@
                                     <i class="zmdi zmdi-account-circle"></i>Add Leave Request
                                 </button>
                             </div>
-
-                            <div class="table-data__tool-right">
+                            <div class="table-data__tool-left">
                                 <a asp-controller="LeaveRequest" asp-action="ExportAll" class="au-btn au-btn-icon au-btn--green au-btn--small">
                                     <i class="zmdi zmdi-case-download"></i>Export CSV (All)
                                 </a>
@@ -110,7 +108,7 @@
                                                     <td>@y.Division</td>
                                                     <td>
                                                         <div class="table-data-feature">
-                                                            
+
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -273,7 +271,7 @@
     $(document).ready(function () {
         $("#myBtn").click(function () {
             var str = $("#myInput").val();
-            var path = "https://localhost:5001/LeaveRequest/Export?Search=" + str;
+            var path = "https://192.168.17.39:5001/LeaveRequest/Export?Search=" + str;
             console.log(path);
             window.location.href = path;
         });
@@ -283,7 +281,7 @@
     function reject_id(id) {
         var emp_id = id.id;
         var emp = emp_id.substring(9);
-        var path = "https://localhost:5001/LeaveRequest/Reject/" + emp;
+        var path = "https://192.168.17.39:5001/LeaveRequest/Reject/" + emp;
         window.location.href = path;
     };
 </script>
@@ -291,26 +289,26 @@
     function appr_id(id) {
         var emp_id = id.id;
         var emp = emp_id.substring(9);
-        var path = "https://localhost:5001/LeaveRequest/Approve/" + emp;
+        var path = "https://192.168.17.39:5001/LeaveRequest/Approve/" + emp;
         window.location.href = path;
     };
 </script>
 <script>
     $(document).ready(function () {
-        $('#permanent_table').after('<div id="nav"></div>');
-        var rowsShown = 2;
+        $('#permanent_table').after('<div class="text-center pagination" id="nav-home"></div>');
+        var rowsShown = 3;
         var rowsTotal = $('#permanent_table tbody tr').length;
         var numPages = rowsTotal / rowsShown;
         for (i = 0; i < numPages; i++) {
             var pageNum = i + 1;
-            $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
+            $('#nav-home').append('<a class="text-center" style="text-align:center" href="#" rel="' + i + '">' + pageNum + '</a> ');
         }
         $('#permanent_table tbody tr').hide();
         $('#permanent_table tbody tr').slice(0, rowsShown).show();
-        $('#nav a:first').addClass('active');
-        $('#nav a').bind('click', function () {
+        $('#nav-home a:first').addClass('active');
+        $('#nav-home a').bind('click', function () {
 
-            $('#nav a').removeClass('active');
+            $('#nav-home a').removeClass('active');
             $(this).addClass('active');
             var currPage = $(this).attr('rel');
             var startItem = currPage * rowsShown;
@@ -322,20 +320,20 @@
 </script>
 <script>
     $(document).ready(function () {
-        $('#contract_table').after('<div id="nav"></div>');
-        var rowsShown = 2;
+        $('#contract_table').after('<div class="text-center pagination" id="nav-profile"></div>');
+        var rowsShown = 3;
         var rowsTotal = $('#contract_table tbody tr').length;
         var numPages = rowsTotal / rowsShown;
         for (i = 0; i < numPages; i++) {
             var pageNum = i + 1;
-            $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
+            $('#nav-profile').append('<a class="text-center" style="text-align:center" href="#" rel="' + i + '">' + pageNum + '</a> ');
         }
         $('#contract_table tbody tr').hide();
         $('#contract_table tbody tr').slice(0, rowsShown).show();
-        $('#nav a:first').addClass('active');
-        $('#nav a').bind('click', function () {
+        $('#nav-profile a:first').addClass('active');
+        $('#nav-profile a').bind('click', function () {
 
-            $('#nav a').removeClass('active');
+            $('#nav-profile a').removeClass('active');
             $(this).addClass('active');
             var currPage = $(this).attr('rel');
             var startItem = currPage * rowsShown;
@@ -347,20 +345,20 @@
 </script>
 <script>
     $(document).ready(function () {
-        $('#probation_table').after('<div id="nav"></div>');
-        var rowsShown = 2;
+        $('#probation_table').after('<div class="text-center pagination" id="nav-contact"></div>');
+        var rowsShown = 3;
         var rowsTotal = $('#probation_table tbody tr').length;
         var numPages = rowsTotal / rowsShown;
         for (i = 0; i < numPages; i++) {
             var pageNum = i + 1;
-            $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
+            $('#nav-contact').append('<a class="text-center" style="text-align:center" href="#" rel="' + i + '">' + pageNum + '</a> ');
         }
         $('#probation_table tbody tr').hide();
         $('#probation_table tbody tr').slice(0, rowsShown).show();
-        $('#nav a:first').addClass('active');
-        $('#nav a').bind('click', function () {
+        $('#nav-contact a:first').addClass('active');
+        $('#nav-contact a').bind('click', function () {
 
-            $('#nav a').removeClass('active');
+            $('#nav-contact a').removeClass('active');
             $(this).addClass('active');
             var currPage = $(this).attr('rel');
             var startItem = currPage * rowsShown;
@@ -434,7 +432,7 @@
             window.open($(this).attr("href"));
 
             //redirect current page to success page
-            window.location = "https://localhost:5001/LeaveRequest";
+            window.location = "https://192.168.17.39:5001/LeaveRequest";
             window.focus();
         }
     );
@@ -448,7 +446,7 @@
             window.open($(this).attr("href"));
 
             //redirect current page to success page
-            window.location = "https://localhost:5001/LeaveRequest";
+            window.location = "https://192.168.17.39:5001/LeaveRequest";
             window.focus();
         }
     );

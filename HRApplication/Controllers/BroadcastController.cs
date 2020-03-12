@@ -6,6 +6,7 @@ using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
 using HRApplication.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,7 @@ namespace HRApplication.Controllers
             AppDbContext = appDbContext;
             Configuration = configuration;
         }
+        [Authorize]
         // GET: Broadcast
         public ActionResult Index()
         {

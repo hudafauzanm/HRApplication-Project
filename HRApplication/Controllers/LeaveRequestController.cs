@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HRApplication.Data;
 using HRApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,7 @@ namespace HRApplication.Controllers
             AppDbContext = appDbContext;
             Configuration = configuration;
         }
+        [Authorize]
         // GET: LeaveRequest
         public ActionResult Index()
         {

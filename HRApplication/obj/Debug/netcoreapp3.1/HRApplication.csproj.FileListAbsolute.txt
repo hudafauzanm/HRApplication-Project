@@ -161,3 +161,5 @@ D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3
 D:\Users\bsi50128\source\repos\HRApplication\HRApplication\bin\Debug\netcoreapp3.1\libman.json
 D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\AddEvent.cshtml.g.cs
 D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Event\AddEvent.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Event\Event.cshtml.g.cs
+D:\Users\bsi50128\source\repos\HRApplication\HRApplication\obj\Debug\netcoreapp3.1\Razor\Views\Event\EditEvent.cshtml.g.cs

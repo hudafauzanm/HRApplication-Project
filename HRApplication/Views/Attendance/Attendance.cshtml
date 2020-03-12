@@ -37,21 +37,36 @@
                         <table class="table table-borderless table-striped table-earning">
                             <thead>
                                 <tr>
-                                    <th>Employee</th>                                    
+                                    <th>Employee</th>
+                                    <th>Today Absen</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @{
-                                    @foreach (var emp in ViewBag.Emp)
+                                    @foreach (var emp in ViewBag.EmpIn)
                                     {
-                                        <tr>
-                                            <td><a href="https://192.168.17.39:5001/Attendance/Attendance/@emp.Id">@emp.Fullname</a></td>
-                                      
-                                        </tr>
-
-                                     }
-                                  }
-                             </tbody>
+                                        @foreach (var e in emp)
+                                        {
+                                <tr>
+                                    <td><a href="https://192.168.17.39:5001/Attendance/Attendance/@e.Id">@e.Fullname</a></td>
+                                    <td style="background-color:limegreen;color:azure">Hadir Masuk</td>
+                                </tr>
+                                        }
+                                        
+                                    }
+                                    @foreach (var empout in ViewBag.EmpOut)
+                                    {
+                                        @foreach(var em in empout)
+                                        {
+                                <tr>
+                                    <td><a href="https://192.168.17.39:5001/Attendance/Attendance/@em.Id">@em.Fullname</a></td>
+                                    <td style="background-color:red;color:azure">Belum Absen</td>
+                                </tr>
+                                        }
+                                        
+                                    }
+                                }
+                            </tbody>
                         </table>
                     </div>
                 </div>

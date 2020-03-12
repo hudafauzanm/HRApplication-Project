@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HRApplication.Data;
 using HRApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,7 @@ namespace HRApplication.Controllers
             AppDbContext = appDbContext;
             Configuration = configuration;
         }
+        [Authorize]
         // GET: Applicant
         public ActionResult Index()
         {
@@ -74,8 +76,36 @@ namespace HRApplication.Controllers
                 csv += appl.Birthplace.Replace(",", ";") + ',';
                 csv += appl.Gender;
                 csv += ",";
-                csv += appl._emergencyContact.Replace(",", ";") + ',';
-                csv += appl.Photo.Replace(",", ";").Replace("\n", " ") + ',';
+                if(appl._emergencyContact == null)
+                {
+                    csv += "Null";
+                    csv += ",";
+                }
+                else
+                {
+                    Console.WriteLine("Kok masuk sini");
+                    csv += appl._emergencyContact.Replace(",", ";") + ',';
+                }
+                if (appl.Photo == null)
+                {
+                    Console.WriteLine("masuk sini");
+                    csv += "Null";
+                    csv += ",";
+
+                }
+                else
+                {
+                    csv += appl.Photo.Replace(",", ";") + ',';
+                }
+                if (appl.CV == null)
+                {
+                    csv += "Null";
+                    csv += ",";
+                }
+                else
+                {
+                    csv += appl.CV.Replace(",", ";") + ',';
+                }
                 csv += appl.Birthdate;
                 csv += ",";
                 csv += appl.Move_at;
@@ -117,8 +147,35 @@ namespace HRApplication.Controllers
                 csv += appl.Birthplace.Replace(",", ";") + ',';
                 csv += appl.Gender;
                 csv += ",";
-                csv += appl._emergencyContact.Replace(",", ";") + ',';
-                csv += appl.Photo.Replace(",", ";").Replace("\n", " ") + ',';
+                if (appl._emergencyContact == null)
+                {
+                    csv += "Null";
+                    csv += ",";
+                }
+                else
+                {
+                    csv += appl._emergencyContact.Replace(",", ";") + ',';
+                }
+                if (appl.Photo == null)
+                {
+                    csv += "Null";
+                    csv += ",";
+
+                }
+                else
+                {
+                    csv += appl.Photo.Replace(",", ";") + ',';
+                }
+                if (appl.CV == null)
+                {
+                    csv += "Null";
+                    csv += ",";
+
+                }
+                else
+                {
+                    csv += appl.CV.Replace(",", ";") + ',';
+                }
                 csv += appl.Birthdate;
                 csv += ",";
                 csv += appl.Move_at;
@@ -204,6 +261,16 @@ namespace HRApplication.Controllers
             }
 
             csv += "\r\n";
+            csv += "Nama" + ',';
+            csv += "Email@Email" + ',';
+            csv += "System Developer" + ',';
+            csv += "ISA" + ',';
+            csv += "Unprocessed/Psychotest/Interview" + ",";
+            csv += "08123123123" + ',';
+            csv += "Klaten/Jogja" + ',';
+            csv += "1/2" + ',';
+            csv += "MM/DD/YYYY" + ',';
+            csv += "ALAMAT";            
 
             //Download the CSV file.
             byte[] bytes = Encoding.ASCII.GetBytes(csv);
@@ -271,6 +338,7 @@ namespace HRApplication.Controllers
             }
         }
 
+        [Authorize]
         // GET: Applicant/Edit/5
         public ActionResult Edit(string id)
         {

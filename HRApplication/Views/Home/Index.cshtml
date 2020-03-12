@@ -45,16 +45,16 @@
                         <h2 class="number">@ViewBag.Out</h2>
                         <span class="desc">Out Today</span>
                         <div class="icon">
-                            <i class="zmdi zmdi-shopping-cart"></i>
+                            <i class="zmdi zmdi-airplane"></i>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <div class="statistic__item">
-                        <h2 class="number">@ViewBag.Att</h2>
+                        <h2 class="number">@ViewBag.Att/@ViewBag.Emp</h2>
                         <span class="desc">Today's Present</span>
                         <div class="icon">
-                            <i class="zmdi zmdi-calendar-note"></i>
+                            <i class="zmdi zmdi-accounts-add"></i>
                         </div>
                     </div>
                 </div>
@@ -115,12 +115,28 @@
                                 <tbody>
                                     @{ 
                                         @foreach(var x in ViewBag.Appl)
-                                        { 
-                                    <tr>
-                                        <td>@x.Fullname</td>
-                                        <td>@x.Position</td>
-                                        <td>@x.Created_at</td>
-                                    </tr>
+                                        {
+                                            var y = DateTime.Now.TimeOfDay - x.Created_at.TimeOfDay;
+                                            <tr>
+                                                <td>@x.Fullname</td>
+                                                <td>@x.Position</td>
+                                                @if (int.Parse(y.ToString("%d")) > 0)
+                                                {
+                                                    <td>@y.ToString("%d") days ago</td>
+                                                }
+                                                @if (int.Parse(y.ToString("%h")) > 0 && int.Parse(y.ToString("%d")) == 0)
+                                                {
+                                                    <td>@y.ToString("%h") hours ago</td>
+                                                }
+                                                @if (int.Parse(y.ToString("%h")) == 0 && int.Parse(y.ToString("%d")) == 0 && int.Parse(y.ToString("%m")) > 0)
+                                                {
+                                                    <td>@y.ToString("%m") minutes ago</td>
+                                                }
+                                                @if (int.Parse(y.ToString("%s")) > 0 && int.Parse(y.ToString("%h")) == 0 && int.Parse(y.ToString("%d")) == 0 && int.Parse(y.ToString("%m")) == 0)
+                                                {
+                                                    <td>@y.ToString("%s") second ago</td>
+                                                }
+                                            </tr>
                                         }
                                     }                                    
                                 </tbody>

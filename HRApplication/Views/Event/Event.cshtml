@@ -1,0 +1,313 @@
+﻿<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- BREADCRUMB-->
+<section class="au-breadcrumb m-t-75">
+    <div class="section__content section__content--p30">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="au-breadcrumb-content">
+                        <div class="au-breadcrumb-left">
+                            <span class="au-breadcrumb-span">You are here:</span>
+                            <ul class="list-unstyled list-inline au-breadcrumb__list">
+                                <li class="list-inline-item active">
+                                    <a href="#">Home</a>
+                                </li>
+                                <li class="list-inline-item seprate">
+                                    <span>/</span>
+                                </li>
+                                <li class="list-inline-item">Applicant</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END BREADCRUMB-->
+<section>
+    <div class="section__content">
+        <div class="container-fluid" style="padding-left:2px;padding-right:2px;">
+            <div class="row">
+                <div class="col-xl-3">
+
+                </div>
+                <div class="col-xl-6">
+                    <!-- DATA TABLE -->
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="table-data__tool p-t-10">
+                            <div class="table-data__tool-right">
+                                <a asp-controller="Event" asp-action="Event" class="au-btn au-btn--green au-btn--small">
+                                    <i class="zmdi zmdi-plus"></i>add new event
+                                </a>
+                            </div>
+                        </div>
+                        <div class="table-responsive table-responsive-data2 tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <table id="permanent_table" class="table table-data2">
+                                <thead>
+                                    <tr>
+                                        <th>event</th>
+                                        <th>date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="myTable">
+                                    @{
+                                        @foreach (var events in ViewBag.Event)
+                                        {
+                                            <tr class="tr-shadow">
+                                                <td>@events.EventName</td>
+                                                <td>
+                                                    @String.Format("{0:dd MMMM}", events.TimeEvent)
+                                                </td>
+                                                <td>
+                                                    <div class="table-data-feature">
+                                                        <button type="submit" id="edit_btn-@events.Id" class="item" data-toggle="tooltip" data-placement="top" onclick="javascript: edit_emp(this)" data-id=@events.Id title="Edit">
+                                                            <i class="zmdi zmdi-edit"></i>
+                                                        </button>
+                                                        <button class="item" id="dele_btn-@events.Id" data-toggle="modal" data-target="#delete-modal" onclick="javascript: delete_id(this)" data-placement="top" data-id=@events.Id title="Delete">
+                                                            <i class="zmdi zmdi-delete"></i>
+                                                        </button>                                                       
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+
+                    </div>
+                    <!-- END DATA TABLE -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="delete-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Article</h3>
+            </div>
+            <form method="post" role="form">
+                <div class="modal-body">
+                    Apakah orang ini sudah selesai?
+                    <input type="text" name="deleteid" id="deleteid" hidden>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input asp-controller="Event" asp-action="Delete" type="submit" class="btn btn-success">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="js/addons/datatables.min.js"></script>
+<link href="css/addons/datatables.min.css" rel="stylesheet">
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#myBtn").click(function () {
+            var str = $("#myInput").val();
+            var path = "https://192.168.17.39:5001/Applicant/Export?Search=" + str;
+            window.location.href = path;
+        });
+    });
+</script>
+<script type="text/javascript">
+    function edit_emp(id) {
+        var emp_id = id.id;
+        var emp = emp_id.substring(9);
+        var path = "https://192.168.17.39:5001/Event/Edit/" + emp;
+        window.location.href = path;
+    };
+</script>
+<script type="text/javascript">
+    function delete_id(id) {
+        var emp_id = id.id;
+        var emp = emp_id.substring(9);
+        console.log(emp);
+        document.getElementById("deleteid").value = emp;
+    };
+</script>
+<script type="text/javascript">
+    function finish_id(id) {
+        var emp_id = id.id;
+        var emp = emp_id.substring(8);
+        var path = "https://192.168.17.39:5001/Employee/Add/" + emp;
+        window.location.href = path;
+    };
+</script>
+<script>
+    $(document).ready(function () {
+        $('#permanent_table').after('<div class="text-center pagination" id="nav-home"></div>');
+        var rowsShown = 5;
+        var rowsTotal = $('#permanent_table tbody tr').length;
+        var numPages = rowsTotal / rowsShown;
+        for (i = 0; i < numPages; i++) {
+            var pageNum = i + 1;
+            $('#nav-home').append('<a class="text-center" style="text-align:center" href="#" rel="' + i + '">' + pageNum + '</a> ');
+        }
+        $('#permanent_table tbody tr').hide();
+        $('#permanent_table tbody tr').slice(0, rowsShown).show();
+        $('#nav-home a:first').addClass('active');
+        $('#nav-home a').bind('click', function () {
+
+            $('#nav-home a').removeClass('active');
+            $(this).addClass('active');
+            var currPage = $(this).attr('rel');
+            var startItem = currPage * rowsShown;
+            var endItem = startItem + rowsShown;
+            $('#permanent_table tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                css('display', 'table-row').animate({ opacity: 1 }, 300);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#contract_table').after('<div class="text-center pagination" id="nav-profile"></div>');
+        var rowsShown = 3;
+        var rowsTotal = $('#contract_table tbody tr').length;
+        var numPages = rowsTotal / rowsShown;
+        for (i = 0; i < numPages; i++) {
+            var pageNum = i + 1;
+            $('#nav-profile').append('<a class="text-center" style="text-align:center" href="#" rel="' + i + '">' + pageNum + '</a> ');
+        }
+        $('#contract_table tbody tr').hide();
+        $('#contract_table tbody tr').slice(0, rowsShown).show();
+        $('#nav-profile a:first').addClass('active');
+        $('#nav-profile a').bind('click', function () {
+
+            $('#nav-profile a').removeClass('active');
+            $(this).addClass('active');
+            var currPage = $(this).attr('rel');
+            var startItem = currPage * rowsShown;
+            var endItem = startItem + rowsShown;
+            $('#contract_table tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                css('display', 'table-row').animate({ opacity: 1 }, 300);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#probation_table').after('<div class="text-center pagination" id="nav-contact"></div>');
+        var rowsShown = 3;
+        var rowsTotal = $('#probation_table tbody tr').length;
+        var numPages = rowsTotal / rowsShown;
+        for (i = 0; i < numPages; i++) {
+            var pageNum = i + 1;
+            $('#nav-contact').append('<a class="text-center" style="text-align:center" href="#" rel="' + i + '">' + pageNum + '</a> ');
+        }
+        $('#probation_table tbody tr').hide();
+        $('#probation_table tbody tr').slice(0, rowsShown).show();
+        $('#nav-contact a:first').addClass('active');
+        $('#nav-contact a').bind('click', function () {
+
+            $('#nav-contact a').removeClass('active');
+            $(this).addClass('active');
+            var currPage = $(this).attr('rel');
+            var startItem = currPage * rowsShown;
+            var endItem = startItem + rowsShown;
+            $('#probation_table tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                css('display', 'table-row').animate({ opacity: 1 }, 300);
+        });
+    });
+</script>
+<script>
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("permanent_table");
+        switching = true;
+
+        dir = "asc";
+
+        while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*Get the two elements you want to compare,
+                one from current row and one from the next:*/
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /*check if the two rows should switch place,
+                based on the direction, asc or desc:*/
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                and mark that a switch has been done:*/
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                //Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /*If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again.*/
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
+<script>
+    $(".au-btn-icon").click(
+        function (e) {
+            e.preventDefault();
+
+            //open download link in new page
+            window.open($(this).attr("href"));
+
+            //redirect current page to success page
+            window.location = "https://192.168.17.39:5001/Applicant";
+            window.focus();
+        }
+    );
+</script>
+<script>
+    $(".dropdown-item").click(
+        function (e) {
+            e.preventDefault();
+
+            //open download link in new page
+            window.open($(this).attr("href"));
+
+            //redirect current page to success page
+            window.location = "https://192.168.17.39:5001/Applicant";
+            window.focus();
+        }
+    );
+</script>

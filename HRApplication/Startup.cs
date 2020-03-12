@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using HRApplication.Data;
@@ -37,7 +38,7 @@ namespace HRApplication
                 options.IdleTimeout = TimeSpan.FromMinutes(60);
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            services.AddSingleton<IHostedService, Birthdays>();
+            //services.AddSingleton<IHostedService, Birthdays>();
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -72,7 +73,8 @@ namespace HRApplication
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                //app.UseStatusCodePagesWithReExecute("/Login");
             }
             else
             {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HRApplication.Data;
 using HRApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -21,24 +22,47 @@ namespace HRApplication.Controllers
             AppDbContext = appDbContext;
             Configuration = configuration;
         }
+        [Authorize]
         // GET: Attandance
         public ActionResult Index()
         {
             var emp = from e in AppDbContext.Employee where e.Resign_at == DateTime.Parse("0001-01-01 00:00:00.0000000") select e;
-            List<IQueryable> empatt = new List<IQueryable>();
-            foreach(var e in emp)
+            List<string> empatt = new List<string>();
+            List<IQueryable> empmasuk = new List<IQueryable>();
+            List<IQueryable> empabsn = new List<IQueryable>();
+            var attendance = from att in AppDbContext.Attendance where att.Clockin.Date == DateTime.Today.Date select att.EmployeeId;
+            foreach(var x in attendance)
             {
-                var attendance = from att in AppDbContext.Attendance where att.EmployeeId == Convert.ToString(e.Id) && att.Clockin.Date == DateTime.Today.Date select att;
-                empatt.Add(attendance);
+                empatt.Add(x);
             }
+            if(empatt.Count() == 0)
+            {
+                var empout = from e in AppDbContext.Employee select e;
+                empabsn.Add(empout);
+            }
+            else
+            {
+                foreach (var x in empatt)
+                {
+                    var empout = from e in AppDbContext.Employee where e.Id != Guid.Parse(x) select e;
+                    empabsn.Add(empout);
+                }
+                foreach (var x in empatt)
+                {
+                    var empin = from e in AppDbContext.Employee where e.Id == Guid.Parse(x) select e;
+                    empmasuk.Add(empin);
+                }
+            }
+            
             var notif = (from e in AppDbContext.LeaveRequest where e.Read_at == DateTime.Parse("0001-01-01 00:00:00.0000000") select e).Count();
             ViewBag.Notif = notif;
             ViewBag.Emp = emp;
-            ViewBag.Att = empatt;
+            ViewBag.EmpIn = empmasuk;
+            ViewBag.EmpOut = empabsn;
 
             return View("Attendance");
         }
-
+        [Authorize]
         public ActionResult Attendance(string Id)
         { 
             var att = from a in AppDbContext.Attendance where a.EmployeeId == Id select a;
@@ -58,6 +82,7 @@ namespace HRApplication.Controllers
             return View();
         }
 
+        [Authorize]
         // POST: Attandance/Create
         [HttpPost]
         public ActionResult Clockin(string EmployeeId, DateTime clockin, DateTime clockout)

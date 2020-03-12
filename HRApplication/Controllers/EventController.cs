@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using HRApplication.Data;
 using HRApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -20,16 +22,19 @@ namespace HRApplication.Controllers
             AppDbContext = appDbContext;
             Configuration = configuration;
         }
+        [Authorize]
         // GET: Event
         public ActionResult Index()
         {
-            return View("AddEvent");
+            var events = from x in AppDbContext.Event select x;
+            ViewBag.Event = events;
+            return View("Event");
         }
 
         // GET: Event/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Event()
         {
-            return View();
+            return View("AddEvent");
         }
 
         // GET: Event/Create
@@ -61,21 +66,33 @@ namespace HRApplication.Controllers
         }
 
         // GET: Event/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string Id)
         {
-            return View();
+            var events = from x in AppDbContext.Event where x.Id == Guid.Parse(Id) select x;
+            string bd = "";
+            foreach (var date in events)
+            {
+                bd = date.TimeEvent.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
+            }
+            var dated = bd.Substring(0, 10).Replace("/", "-");
+            ViewBag.Date = dated;
+            ViewBag.Event = events;
+            return View("EditEvent");
         }
 
         // POST: Event/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(string Id,string Eventname,DateTime Eventdate)
         {
             try
             {
-                // TODO: Add update logic here
+                var idedits = Guid.Parse(Id);
+                var events = AppDbContext.Event.Find(idedits);
+                events.EventName = Eventname;
+                events.TimeEvent = Eventdate;
+                AppDbContext.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index","Event");
             }
             catch
             {
@@ -91,14 +108,16 @@ namespace HRApplication.Controllers
 
         // POST: Event/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(string deleteid)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
+                Console.WriteLine(deleteid);
+                var idedits = Guid.Parse(deleteid);
+                var edits = AppDbContext.Event.Find(idedits);
+                AppDbContext.Remove(edits);
+                AppDbContext.SaveChanges();
+                return RedirectToAction("Index", "Event");
             }
             catch
             {

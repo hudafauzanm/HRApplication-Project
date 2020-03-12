@@ -1,4 +1,12 @@
 ﻿<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .pagination li:hover{
+    cursor: pointer;
+}
+    table tbody tr {
+        display: none;
+    }
+</style>
 <!-- BREADCRUMB-->
 <section class="au-breadcrumb m-t-75">
     <div class="section__content section__content--p30">
@@ -26,8 +34,8 @@
 </section>
 <!-- END BREADCRUMB-->
 <section>
-    <div class="section__content section__content--p30">
-        <div class="container-fluid">
+    <div class="section__content">
+        <div class="container-fluid" style="padding-left:2px;padding-right:2px;">
             <div class="row">
                 <div class="col-xl-12">
                     <nav>
@@ -39,16 +47,8 @@
                     </nav>
                     <!-- DATA TABLE -->
                     <div class="tab-content" id="nav-tabContent">
-                        <h3 class="title-5 m-b-35 p-t-30">data table</h3>
-                        <div class="table-data__tool">
-                            <div class="table-data__tool-left">
-                                <div class="rs-select2--light rs-select2--sm">
-                                    <div class="rs-select2--light rs-select2--sm">
-                                        <input class="js-select2" id="myInput" type="text" placeholder="Search..">
-                                        <button id="myBtn">Export</button>
-                                    </div>
-                                </div>
-                            </div>
+
+                        <div class="table-data__tool p-t-10">
                             <div class="table-data__tool-right">
                                 <a asp-controller="Employee" asp-action="Add" class="au-btn au-btn--green au-btn--small">
                                     <i class="zmdi zmdi-plus"></i>add new employee
@@ -58,6 +58,27 @@
                                 <a asp-controller="Employee" asp-action="ExportAll" class="au-btn au-btn-icon au-btn--green au-btn--small">
                                     <i class="zmdi zmdi-case-download"></i>Export CSV (All)
                                 </a>
+                            </div>                            
+                            <div class="table-data__tool-right">
+                                <a href=" https://localhost:5001/Employee/ImportTemp" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                                    <i class="zmdi zmdi-case-download"></i>Template
+                                </a>
+                            </div>
+                            <div class="table-data__tool-right">
+                                <form asp-action="Import" asp-controller="Employee" method="post" enctype="multipart/form-data">
+                                    <input type="file" name="Upload" value="Upload">
+                                    <button type="submit" class="btn btn-success">Import</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="table-data__tool">
+                            <div class="table-data__tool-right">
+                                <div class="rs-select2--light rs-select2--sm">
+                                    <div class="rs-select2--light rs-select2--sm">
+                                        <input class="js-select2" id="myInput" type="text" placeholder="Search..">
+                                        <button class="btn btn-secondary" id="myBtn">Export</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="table-data__tool-right">
                                 <div class="dropdown">
@@ -65,23 +86,12 @@
                                         Export
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href=" https://localhost:5001/Employee/Export?status=Permanent">Permanent</a>
-                                        <a class="dropdown-item" href=" https://localhost:5001/Employee/Export?status=Contract">Contract</a>
-                                        <a class="dropdown-item" href=" https://localhost:5001/Employee/Export?status=Probation">Probation</a>
+                                        <a class="dropdown-item" href=" https://192.168.17.39:5001/Employee/Export?status=Permanent">Permanent</a>
+                                        <a class="dropdown-item" href=" https://192.168.17.39:5001/Employee/Export?status=Contract">Contract</a>
+                                        <a class="dropdown-item" href=" https://192.168.17.39:5001/Employee/Export?status=Probation">Probation</a>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="table-data__tool-right">
-                                <a  href=" https://localhost:5001/Employee/ImportTemp" class="au-btn au-btn-icon au-btn--green au-btn--small">
-                                    <i class="zmdi zmdi-case-download"></i>Template
-                                </a>
-                            </div>
-                            <div class="table-data__tool-right">
-                                <form asp-action="Import" asp-controller="Employee" method="post" enctype="multipart/form-data" >
-                                    <input type="file" name="Upload" value="Upload">
-                                    <button type="submit" class="btn btn-success">Import</button>
-                                </form>
-                            </div>
+                            </div>                            
                         </div>
                         <div class="table-responsive table-responsive-data2 tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                             <table id="permanent_table" class="table table-data2">
@@ -113,7 +123,7 @@
                                                 <td>@permanent.Division</td>
                                                 <td>
                                                     <div class="table-data-feature">
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                                        <button class="item" id="mail_btn-@permanent.Id" data-toggle="tooltip" data-placement="top" onclick="javascript: email_emp(this)" title="Send">
                                                             <i class="zmdi zmdi-mail-send"></i>
                                                         </button>
                                                         <button type="submit" id="edit_btn-@permanent.Id" class="item" data-toggle="tooltip" data-placement="top" onclick="javascript: edit_emp(this)" data-id=@permanent.Id title="Edit">
@@ -163,7 +173,7 @@
                                                 <td>@permanent.Division</td>
                                                 <td>
                                                     <div class="table-data-feature">
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                                        <button class="item" id="mail_btn-@permanent.Id" data-toggle="tooltip" data-placement="top" onclick="javascript: email_emp(this)" title="Send">
                                                             <i class="zmdi zmdi-mail-send"></i>
                                                         </button>
                                                         <button type="submit" id="edit_btn-@permanent.Id" class="item" data-toggle="tooltip" data-placement="top" onclick="javascript: edit_emp(this)" data-id=@permanent.Id title="Edit">
@@ -181,7 +191,7 @@
                                         }
                                     }
                                 </tbody>
-                            </table>
+                            </table>                            
                         </div>
                         <div class="table-responsive table-responsive-data2 tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-home-tab">
                             <table id="probation_table" class="table table-data2">
@@ -213,7 +223,7 @@
                                                 <td>@permanent.Division</td>
                                                 <td>
                                                     <div class="table-data-feature">
-                                                        <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                                        <button class="item" id="mail_btn-@permanent.Id" data-toggle="tooltip" data-placement="top" onclick="javascript: email_emp(this)" title="Send">
                                                             <i class="zmdi zmdi-mail-send"></i>
                                                         </button>
                                                         <button type="submit" id="edit_btn-@permanent.Id" class="item" data-toggle="tooltip" data-placement="top" onclick="javascript: edit_emp(this)" data-id=@permanent.Id title="Edit">
@@ -231,7 +241,7 @@
                                         }
                                     }
                                 </tbody>
-                            </table>
+                            </table>                            
                         </div>
                     </div>
 
@@ -280,7 +290,7 @@
     $(document).ready(function () {
         $("#myBtn").click(function(){
         var str = $("#myInput").val();
-        var path = "https://localhost:5001/Employee/Export?Search=" + str;
+        var path = "https://192.168.17.39:5001/Employee/Export?Search=" + str;
         window.location.href = path;
         });
     });
@@ -289,7 +299,15 @@
     function edit_emp(id) {
         var emp_id = id.id;
         var emp = emp_id.substring(9);
-        var path = "https://localhost:5001/Employee/Edit/" + emp;
+        var path = "https://192.168.17.39:5001/Employee/Edit/" + emp;
+        window.location.href = path;
+    };
+</script>
+<script type="text/javascript">
+    function email_emp(id) {
+        var emp_id = id.id;
+        var emp = emp_id.substring(9);
+        var path = "https://192.168.17.39:5001/Employee/SendEmail/" + emp;
         window.location.href = path;
     };
 </script>
@@ -303,20 +321,20 @@
 </script>
 <script>
     $(document).ready(function(){
-    $('#permanent_table').after('<div id="nav"></div>');
+    $('#permanent_table').after('<div class="text-center pagination" id="nav-home"></div>');
     var rowsShown = 2;
     var rowsTotal = $('#permanent_table tbody tr').length;
     var numPages = rowsTotal/rowsShown;
     for(i = 0;i < numPages;i++) {
         var pageNum = i + 1;
-        $('#nav').append('<a href="#" rel="'+i+'">'+pageNum+'</a> ');
+        $('#nav-home').append('<a class="text-center" style="text-align:center" href="#" rel="'+i+'">'+pageNum+'</a> ');
     }
     $('#permanent_table tbody tr').hide();
     $('#permanent_table tbody tr').slice(0, rowsShown).show();
-    $('#nav a:first').addClass('active');
-    $('#nav a').bind('click', function(){
+    $('#nav-home a:first').addClass('active');
+    $('#nav-home a').bind('click', function(){
 
-        $('#nav a').removeClass('active');
+        $('#nav-home a').removeClass('active');
         $(this).addClass('active');
         var currPage = $(this).attr('rel');
         var startItem = currPage * rowsShown;
@@ -328,20 +346,20 @@
 </script>
 <script>
     $(document).ready(function () {
-        $('#contract_table').after('<div id="nav"></div>');
+        $('#contract_table').after('<div class="text-center pagination" id="nav-profile"></div>');
         var rowsShown = 2;
         var rowsTotal = $('#contract_table tbody tr').length;
         var numPages = rowsTotal / rowsShown;
         for (i = 0; i < numPages; i++) {
             var pageNum = i + 1;
-            $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
+            $('#nav-profile').append('<a class="text-center" style="text-align:center" href="#" rel="' + i + '">' + pageNum + '</a> ');
         }
         $('#contract_table tbody tr').hide();
         $('#contract_table tbody tr').slice(0, rowsShown).show();
-        $('#nav a:first').addClass('active');
-        $('#nav a').bind('click', function () {
+        $('#nav-profile a:first').addClass('active');
+        $('#nav-profile a').bind('click', function () {
 
-            $('#nav a').removeClass('active');
+            $('#nav-profile a').removeClass('active');
             $(this).addClass('active');
             var currPage = $(this).attr('rel');
             var startItem = currPage * rowsShown;
@@ -353,20 +371,20 @@
 </script>
 <script>
     $(document).ready(function () {
-        $('#probation_table').after('<div id="nav"></div>');
+        $('#probation_table').after('<div class="text-center pagination" id="nav-contact"></div>');
         var rowsShown = 2;
         var rowsTotal = $('#probation_table tbody tr').length;
         var numPages = rowsTotal / rowsShown;
         for (i = 0; i < numPages; i++) {
             var pageNum = i + 1;
-            $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
+            $('#nav-contact').append('<a class="text-center" style="text-align:center" href="#" rel="' + i + '">' + pageNum + '</a> ');
         }
         $('#probation_table tbody tr').hide();
         $('#probation_table tbody tr').slice(0, rowsShown).show();
-        $('#nav a:first').addClass('active');
-        $('#nav a').bind('click', function () {
+        $('#nav-contact a:first').addClass('active');
+        $('#nav-contact a').bind('click', function () {
 
-            $('#nav a').removeClass('active');
+            $('#nav-contact a').removeClass('active');
             $(this).addClass('active');
             var currPage = $(this).attr('rel');
             var startItem = currPage * rowsShown;
@@ -436,7 +454,7 @@
     function(e) {   
         e.preventDefault();
         window.open( $(this).attr("href") );
-        window.location="https://localhost:5001/Employee";
+        window.location="https://192.168.17.39:5001/Employee";
         window.focus();
     }
 );
@@ -446,7 +464,7 @@
         function (e) {
             e.preventDefault();
             window.open($(this).attr("href"));
-            window.location = "https://localhost:5001/Employee";
+            window.location = "https://192.168.17.39:5001/Employee";
             window.focus();
         }
     );

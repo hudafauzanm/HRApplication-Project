@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using HRApplication.Data;
 using HRApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +27,7 @@ namespace HRApplication.Controllers
             AppDbContext = appDbContext;
             Configuration = configuration;
         }
+        [Authorize]
         // GET: Employee
         public ActionResult Index()
         {
@@ -39,7 +44,7 @@ namespace HRApplication.Controllers
         public FileResult ExportAll()
         {
             var export_emp = from ex in AppDbContext.Employee select ex;
-            string[] colomnama = new string[15] { "Employee ID", "FullName", "Email", "Position", "Division","Status", "Phone", "Birthplace", "Gender", "Emergency Contact", "Photo", "Birthdate", "Resign_at", "Created", "Address" };
+            string[] colomnama = new string[15] { "Employee ID", "FullName", "Email", "Position", "Division", "Status", "Phone", "Birthplace", "Gender", "Emergency Contact", "Photo", "Birthdate", "Resign_at", "Created", "Address" };
             string csv = string.Empty;
 
             foreach (string columnName in colomnama)
@@ -62,15 +67,32 @@ namespace HRApplication.Controllers
                 csv += emp.Birthplace.Replace(",", ";") + ',';
                 csv += emp.Gender;
                 csv += ",";
-                csv += emp._emergencyContact.Replace(",", ";") + ',';
-                csv += emp.Photo.Replace(",", ";").Replace("\n", " ") + ',';
+                if (emp._emergencyContact == null)
+                {
+                    csv += "Null";
+                    csv += ",";
+                }
+                else
+                {
+                    csv += emp._emergencyContact.Replace(",", ";") + ',';
+                }
+                if (emp.Photo == null)
+                {
+                    csv += "Null";
+                    csv += ",";
+
+                }
+                else
+                {
+                    csv += emp.Photo.Replace(",", ";") + ',';
+                }
                 csv += emp.Birthdate;
                 csv += ",";
                 csv += emp.Resign_at;
                 csv += ",";
                 csv += emp.Created_at;
                 csv += ",";
-                csv += Convert.ToString(emp.Address).Replace("\n", " ");
+                csv += Convert.ToString(emp.Address);
                 //Add new line.
                 csv += "\r\n";
             }
@@ -79,10 +101,10 @@ namespace HRApplication.Controllers
             byte[] bytes = Encoding.ASCII.GetBytes(csv);
             return File(bytes, "application/text", "EmployeeAll.csv");
         }
-        public FileResult Export(string status,string search)
+        public FileResult Export(string status, string search)
         {
             var export_emp = from ex in AppDbContext.Employee where ex.Status.Contains(status) || ex.Fullname.Contains(search) select ex;
-            string[] colomnama = new string[15] { "Employee ID", "FullName", "Email", "Position", "Division","Status", "Phone","Birthplace","Gender","Emergency Contact","Photo", "Birthdate", "Resign_at", "Created", "Address" };
+            string[] colomnama = new string[15] { "Employee ID", "FullName", "Email", "Position", "Division", "Status", "Phone", "Birthplace", "Gender", "Emergency Contact", "Photo", "Birthdate", "Resign_at", "Created", "Address" };
             string csv = string.Empty;
 
             foreach (string columnName in colomnama)
@@ -105,15 +127,32 @@ namespace HRApplication.Controllers
                 csv += emp.Birthplace.Replace(",", ";") + ',';
                 csv += emp.Gender;
                 csv += ",";
-                csv += emp._emergencyContact.Replace(",", ";") + ',';
-                csv += emp.Photo.Replace(",", ";").Replace("\n"," ") + ',';
+                if (emp._emergencyContact == null)
+                {
+                    csv += "Null";
+                    csv += ",";
+                }
+                else
+                {
+                    csv += emp._emergencyContact.Replace(",", ";") + ',';
+                }
+                if (emp.Photo == null)
+                {
+                    csv += "Null";
+                    csv += ",";
+
+                }
+                else
+                {
+                    csv += emp.Photo.Replace(",", ";") + ',';
+                }
                 csv += emp.Birthdate;
                 csv += ",";
                 csv += emp.Resign_at;
                 csv += ",";
                 csv += emp.Created_at;
                 csv += ",";
-                csv += Convert.ToString(emp.Address).Replace("/n"," ");
+                csv += Convert.ToString(emp.Address);
                 //Add new line.
                 csv += "\r\n";
             }
@@ -125,7 +164,7 @@ namespace HRApplication.Controllers
         public FileResult ImportTemp()
         {
             var export_emp = from ex in AppDbContext.Employee select ex;
-            string[] colomnama = new string[10]  {"FullName", "Email", "Position", "Division", "Status","Phone", "Birthplace", "Gender", "Birthdate", "Address" };
+            string[] colomnama = new string[10] { "FullName", "Email", "Position", "Division", "Status", "Phone", "Birthplace", "Gender", "Birthdate", "Address" };
             string csv = string.Empty;
 
             foreach (string columnName in colomnama)
@@ -134,6 +173,16 @@ namespace HRApplication.Controllers
             }
 
             csv += "\r\n";
+            csv += "Nama" + ',';
+            csv += "Email@Email" + ',';
+            csv += "System Developer" + ',';
+            csv += "ISA" + ',';
+            csv += "Permanent/Probation/Contract" + ",";
+            csv += "08123123123" + ',';
+            csv += "Klaten/Jogja" + ',';
+            csv += "1/2" + ',';
+            csv += "MM/DD/YYYY" + ',';
+            csv += "ALAMAT";
 
             //Download the CSV file.
             byte[] bytes = Encoding.ASCII.GetBytes(csv);
@@ -166,7 +215,6 @@ namespace HRApplication.Controllers
 
                             Employe employee = new Employe()
                             {
- 
                                 Fullname = rows[0].ToString(),
                                 Email = rows[1].ToString(),
                                 Position = rows[2].ToString(),
@@ -177,7 +225,7 @@ namespace HRApplication.Controllers
                                 Gender = int.Parse(rows[7]),
                                 Birthdate = DateTime.Parse(rows[8]),
                                 Address = rows[9],
-                                Created_at=DateTime.Now
+                                Created_at = DateTime.Now
                             };
 
                             AppDbContext.Employee.Add(employee);
@@ -200,14 +248,14 @@ namespace HRApplication.Controllers
             return RedirectToAction("Index", "Employee");
         }
         // GET: Employee
+        [Authorize]
         public ActionResult Add(string id)
         {
-            if(String.IsNullOrEmpty(id) == true)
+            if (String.IsNullOrEmpty(id) == true)
             {
-                Console.WriteLine("masuk sini aja");
                 ViewBag.App = "";
             }
-            else 
+            else
             {
                 var app = from a in AppDbContext.Applicant where a.Id == Guid.Parse(id) select a;
                 var empdata = (from x in AppDbContext.Applicant where x.Id == Guid.Parse(id) select x.Birthdate).Distinct();
@@ -242,13 +290,13 @@ namespace HRApplication.Controllers
 
         // POST: Employee/Create
         [HttpPost]
-        public ActionResult Create(string Fullname,string Email,string Phone,string Status,int Gender,DateTime Birthdate,string Birthplace,string Address,string Position,string Division,string emername,string emerphone, [FromForm(Name = "Photo")]IFormFile Photo)
+        public ActionResult Create(string Fullname, string Email, string Phone, string Status, int Gender, DateTime Birthdate, string Birthplace, string Address, string Position, string Division, string emername, string emerphone, [FromForm(Name = "Photo")]IFormFile Photo)
         {
             try
             {
                 Console.WriteLine("Masuk sini");
                 List<string> emergency = new List<string>();
-                emergency.Add(emername +","+ emerphone);
+                emergency.Add(emername + "," + emerphone);
                 Console.WriteLine();
                 if (!System.IO.Directory.Exists("wwwroot" + "/Image/"))
                 {
@@ -283,11 +331,11 @@ namespace HRApplication.Controllers
                     AppDbContext.Employee.Add(employee);
                 }
                 AppDbContext.SaveChanges();
-                return RedirectToAction("Index","Employee");
+                return RedirectToAction("Index", "Employee");
             }
             catch
             {
-                return View();
+                return View("Employee");
             }
         }
         // POST: Employee/Create
@@ -296,7 +344,7 @@ namespace HRApplication.Controllers
         {
             try
             {
-                Console.WriteLine("Masuk sini");
+               
                 List<string> emergency = new List<string>();
                 emergency.Add(emername + "," + emerphone);
                 Console.WriteLine();
@@ -307,7 +355,6 @@ namespace HRApplication.Controllers
                 string storePath = "wwwroot/Image/";
                 if (Photo != null)
                 {
-                    Console.WriteLine("Masuk sini juga");
                     var path = Path.Combine(storePath, Photo.FileName);
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
@@ -341,14 +388,14 @@ namespace HRApplication.Controllers
             }
         }
 
+        [Authorize]
         // GET: Employee/Edit/5
         public ActionResult Edit(string id)
         {
-            Console.WriteLine(id);
             var emp = from e in AppDbContext.Employee where e.Id == Guid.Parse(id) select e;
             var empdata = (from x in AppDbContext.Employee where x.Id == Guid.Parse(id) select x.Birthdate).Distinct();
             string bd = "";
-            foreach(var date in empdata)
+            foreach (var date in empdata)
             {
                 bd = date.ToString("yyyy/MM/dd", CultureInfo.InvariantCulture);
             }
@@ -360,11 +407,10 @@ namespace HRApplication.Controllers
 
         // POST: Employee/Edit/5
         [HttpPost]
-        public ActionResult Edit(string Id,string Fullname, string Email, string Phone, string Status, int Gender, DateTime Birthdate, string Birthplace, string Address, string Position, string Division, string emername, string emerphone, [FromForm(Name = "Photo")]IFormFile Photo)
+        public ActionResult Edit(string Id, string Fullname, string Email, string Phone, string Status, int Gender, DateTime Birthdate, string Birthplace, string Address, string Position, string Division, string emername, string emerphone, [FromForm(Name = "Photo")]IFormFile Photo)
         {
             try
-            {
-                Console.WriteLine("Masuki sini dah");
+            {      
                 List<string> emergency = new List<string>();
                 emergency.Add(emername + "," + emerphone);
                 Console.WriteLine();
@@ -374,8 +420,7 @@ namespace HRApplication.Controllers
                 }
                 string storePath = "wwwroot/Image/";
                 if (Photo != null)
-                {  
-                    Console.WriteLine("Masuk sini juga");
+                {
                     var path = Path.Combine(storePath, Photo.FileName);
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
@@ -397,7 +442,6 @@ namespace HRApplication.Controllers
                     edit.Status = Status;
                     edit.Photo = pathfix;
                 }
-                Console.WriteLine("MASUK SINI BERARTI");
                 var idedits = Guid.Parse(Id);
                 var edits = AppDbContext.Employee.Find(idedits);
                 edits.Fullname = Fullname;
@@ -442,6 +486,42 @@ namespace HRApplication.Controllers
             catch
             {
                 return View();
+            }
+        }
+        [Authorize]
+        public ActionResult SendEmail(string id)
+        {            
+            List<string> emails = new List<string>();
+            var email = from e in AppDbContext.Employee where e.Id == Guid.Parse(id) select e;
+            foreach (var e in email)
+            {
+                emails.Add(e.Email);
+            }
+            Thread task = new Thread(() => MailService(emails));
+            task.Start();
+            return RedirectToAction("Index", "Employee");
+        }
+
+        public void MailService(List<string> email)
+        {
+            foreach (var x in email)
+            {
+                MailAddress to = new MailAddress(x);
+                MailAddress from = new MailAddress("adminHRBERLIAN-HUCA@HUCA.com");
+                MailMessage message = new MailMessage(from, to);
+                message.Subject = "BERLIAN-HUCA-ADMIN";
+                message.Body = $@"<p>Hey {x},<br>
+                            <h3>INFORMASI PEGAWAI</h3><br>
+                            <p>Message : ANDA MENDAPATKAN SURAT PERINGATAN DIKARENAKAN ANDA MELAKUKAN SESUATU HAL<br>
+                            <p>Thankyou<br>
+                            <p>-- ADMIN<br>";
+                message.IsBodyHtml = true;
+                SmtpClient client = new SmtpClient("smtp.mailtrap.io", 587)
+                {
+                    Credentials = new NetworkCredential("00d7115f88c37d", "2d3d930201d6ed"),
+                    EnableSsl = true
+                };
+                client.Send(message);
             }
         }
     }
