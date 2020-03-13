@@ -1,8 +1,14 @@
-﻿<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<style>
-    .pagination li:hover{
-    cursor: pointer;
+﻿@{
+    ViewData["Title"] = "Cart";
+    ViewData["Notif"] = ViewBag.Notif;
+    ViewData["Name"] = ViewBag.Name;
 }
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .pagination li:hover {
+        cursor: pointer;
+    }
+
     table tbody tr {
         display: none;
     }
@@ -18,7 +24,7 @@
                             <span class="au-breadcrumb-span">You are here:</span>
                             <ul class="list-unstyled list-inline au-breadcrumb__list">
                                 <li class="list-inline-item active">
-                                    <a href="#">Home</a>
+                                    <a asp-action="Index" asp-controller="Home">Home</a>
                                 </li>
                                 <li class="list-inline-item seprate">
                                     <span>/</span>
@@ -58,7 +64,7 @@
                                 <a asp-controller="Employee" asp-action="ExportAll" class="au-btn au-btn-icon au-btn--green au-btn--small">
                                     <i class="zmdi zmdi-case-download"></i>Export CSV (All)
                                 </a>
-                            </div>                            
+                            </div>
                             <div class="table-data__tool-right">
                                 <a href=" https://localhost:5001/Employee/ImportTemp" class="au-btn au-btn-icon au-btn--green au-btn--small">
                                     <i class="zmdi zmdi-case-download"></i>Template
@@ -91,7 +97,7 @@
                                         <a class="dropdown-item" href=" https://192.168.17.39:5001/Employee/Export?status=Probation">Probation</a>
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                         <div class="table-responsive table-responsive-data2 tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                             <table id="permanent_table" class="table table-data2">
@@ -191,7 +197,7 @@
                                         }
                                     }
                                 </tbody>
-                            </table>                            
+                            </table>
                         </div>
                         <div class="table-responsive table-responsive-data2 tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-home-tab">
                             <table id="probation_table" class="table table-data2">
@@ -241,7 +247,7 @@
                                         }
                                     }
                                 </tbody>
-                            </table>                            
+                            </table>
                         </div>
                     </div>
 
@@ -288,10 +294,10 @@
 </script>
 <script>
     $(document).ready(function () {
-        $("#myBtn").click(function(){
-        var str = $("#myInput").val();
-        var path = "https://192.168.17.39:5001/Employee/Export?Search=" + str;
-        window.location.href = path;
+        $("#myBtn").click(function () {
+            var str = $("#myInput").val();
+            var path = "https://192.168.17.39:5001/Employee/Export?Search=" + str;
+            window.location.href = path;
         });
     });
 </script>
@@ -320,29 +326,29 @@
     };
 </script>
 <script>
-    $(document).ready(function(){
-    $('#permanent_table').after('<div class="text-center pagination" id="nav-home"></div>');
-    var rowsShown = 2;
-    var rowsTotal = $('#permanent_table tbody tr').length;
-    var numPages = rowsTotal/rowsShown;
-    for(i = 0;i < numPages;i++) {
-        var pageNum = i + 1;
-        $('#nav-home').append('<a class="text-center" style="text-align:center" href="#" rel="'+i+'">'+pageNum+'</a> ');
-    }
-    $('#permanent_table tbody tr').hide();
-    $('#permanent_table tbody tr').slice(0, rowsShown).show();
-    $('#nav-home a:first').addClass('active');
-    $('#nav-home a').bind('click', function(){
+    $(document).ready(function () {
+        $('#permanent_table').after('<div class="text-center pagination" id="nav-home"></div>');
+        var rowsShown = 2;
+        var rowsTotal = $('#permanent_table tbody tr').length;
+        var numPages = rowsTotal / rowsShown;
+        for (i = 0; i < numPages; i++) {
+            var pageNum = i + 1;
+            $('#nav-home').append('<a class="text-center" style="text-align:center" href="#" rel="' + i + '">' + pageNum + '</a> ');
+        }
+        $('#permanent_table tbody tr').hide();
+        $('#permanent_table tbody tr').slice(0, rowsShown).show();
+        $('#nav-home a:first').addClass('active');
+        $('#nav-home a').bind('click', function () {
 
-        $('#nav-home a').removeClass('active');
-        $(this).addClass('active');
-        var currPage = $(this).attr('rel');
-        var startItem = currPage * rowsShown;
-        var endItem = startItem + rowsShown;
-        $('#permanent_table tbody tr').css('opacity','0.0').hide().slice(startItem, endItem).
-        css('display','table-row').animate({opacity:1}, 300);
+            $('#nav-home a').removeClass('active');
+            $(this).addClass('active');
+            var currPage = $(this).attr('rel');
+            var startItem = currPage * rowsShown;
+            var endItem = startItem + rowsShown;
+            $('#permanent_table tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                css('display', 'table-row').animate({ opacity: 1 }, 300);
+        });
     });
-});
 </script>
 <script>
     $(document).ready(function () {
@@ -401,7 +407,7 @@
         switching = true;
 
         dir = "asc";
-      
+
         while (switching) {
             //start by saying: no switching is done:
             switching = false;
@@ -451,13 +457,13 @@
 </script>
 <script>
     $(".au-btn-icon").click(
-    function(e) {   
-        e.preventDefault();
-        window.open( $(this).attr("href") );
-        window.location="https://192.168.17.39:5001/Employee";
-        window.focus();
-    }
-);
+        function (e) {
+            e.preventDefault();
+            window.open($(this).attr("href"));
+            window.location = "https://192.168.17.39:5001/Employee";
+            window.focus();
+        }
+    );
 </script>
 <script>
     $(".dropdown-item").click(

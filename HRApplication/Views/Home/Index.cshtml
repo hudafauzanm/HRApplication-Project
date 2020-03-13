@@ -1,4 +1,9 @@
-﻿<!-- BREADCRUMB-->
+﻿@{
+    ViewData["Title"] = "Cart";
+    ViewData["Notif"] = ViewBag.Notif;
+    ViewData["Name"] = ViewBag.Name;
+}
+<!-- BREADCRUMB-->
 <section class="au-breadcrumb m-t-75">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
@@ -25,8 +30,8 @@
 </section>
 <!-- END BREADCRUMB-->
 <!-- STATISTIC-->
-<section class="statistic">
-    <div class="section__content section__content--p30">
+<section class="statistic" style="padding-top: 20px;">
+    <div class="section__content section__content--p20">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6 col-lg-4">
@@ -65,7 +70,7 @@
 <!-- END STATISTIC-->
 
 <section>
-    <div class="section__content section__content--p30">
+    <div class="section__content section__content--p20">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-6">
@@ -78,27 +83,27 @@
                                     <tr>
                                         <th>Event</th>
                                         <th>Day</th>
-                                        
+
                                     </tr>
                                 </thead>
-                                <tbody>                            
-                                        @{
-                                            @foreach (var x in ViewBag.Event)
-                                            {
-                                                <tr>
-                                                    <td>@x.EventName</td>
-                                                    <td>@String.Format("{0:dd MMMM}", x.TimeEvent)</td>
-                                                </tr>
-                                                
-                                            }
+                                <tbody>
+                                    @{
+                                        @foreach (var x in ViewBag.Event)
+                                        {
+                                            <tr>
+                                                <td>@x.EventName</td>
+                                                <td>@String.Format("{0:dd MMMM}", x.TimeEvent)</td>
+                                            </tr>
+
                                         }
-                                                                  
+                                    }
+
                                 </tbody>
                             </table>
                         </div>
                         <!-- END DATA TABLE-->
-                        </div>
                     </div>
+                </div>
                 <div class="col-xl-6">
                     <div class="recent-report2">
                         <h3 class="title-5">New Applicants</h3>
@@ -113,39 +118,40 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @{ 
-                                        @foreach(var x in ViewBag.Appl)
+                                    @{
+                                        @foreach (var x in ViewBag.Appl)
                                         {
-                                            var y = DateTime.Now.TimeOfDay - x.Created_at.TimeOfDay;
-                                            <tr>
-                                                <td>@x.Fullname</td>
-                                                <td>@x.Position</td>
-                                                @if (int.Parse(y.ToString("%d")) > 0)
-                                                {
-                                                    <td>@y.ToString("%d") days ago</td>
-                                                }
-                                                @if (int.Parse(y.ToString("%h")) > 0 && int.Parse(y.ToString("%d")) == 0)
-                                                {
-                                                    <td>@y.ToString("%h") hours ago</td>
-                                                }
-                                                @if (int.Parse(y.ToString("%h")) == 0 && int.Parse(y.ToString("%d")) == 0 && int.Parse(y.ToString("%m")) > 0)
-                                                {
-                                                    <td>@y.ToString("%m") minutes ago</td>
-                                                }
-                                                @if (int.Parse(y.ToString("%s")) > 0 && int.Parse(y.ToString("%h")) == 0 && int.Parse(y.ToString("%d")) == 0 && int.Parse(y.ToString("%m")) == 0)
-                                                {
-                                                    <td>@y.ToString("%s") second ago</td>
-                                                }
-                                            </tr>
+                                            var y = DateTime.Now - x.Created_at;
+                                            var day = DateTime.Now.Day - x.Created_at.Day;                                           
+                                    <tr>                                        
+                                        <td>@x.Fullname</td>
+                                        <td>@x.Position</td>                                        
+                                        @if (day > 0)
+                                        {
+                                            <td>@day days ago</td>
                                         }
-                                    }                                    
+                                        @if (day == 0 && int.Parse(y.ToString("hh")) > 0)
+                                        {
+                                            <td>@y.ToString("hh") hours ago</td>
+                                        }
+                                        @if (int.Parse(y.ToString("hh")) == 0 && day == 0 && int.Parse(y.ToString("mm")) > 0 )
+                                        {
+                                            <td>@y.ToString("mm") minutes ago</td>
+                                        }
+                                        @if (y.ToString("hh") == "00" && day == 0 && y.ToString("mm") == "00")
+                                        {
+                                            <td>@y.ToString("ss") seconds ago</td>
+                                        }
+                                    </tr>
+                                        }
+                                    }
                                 </tbody>
                             </table>
                         </div>
                         <!-- END DATA TABLE-->
-                        </div>
                     </div>
                 </div>
+            </div>
         </div>
     </div>
 </section>

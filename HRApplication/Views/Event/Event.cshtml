@@ -1,4 +1,9 @@
-﻿<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+﻿@{
+    ViewData["Title"] = "Cart";
+    ViewData["Notif"] = ViewBag.Notif;
+    ViewData["Name"] = ViewBag.Name;
+}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!-- BREADCRUMB-->
 <section class="au-breadcrumb m-t-75">
     <div class="section__content section__content--p30">
@@ -10,12 +15,12 @@
                             <span class="au-breadcrumb-span">You are here:</span>
                             <ul class="list-unstyled list-inline au-breadcrumb__list">
                                 <li class="list-inline-item active">
-                                    <a href="#">Home</a>
+                                    <a asp-action="Index" asp-controller="Home">Home</a>
                                 </li>
                                 <li class="list-inline-item seprate">
                                     <span>/</span>
                                 </li>
-                                <li class="list-inline-item">Applicant</li>
+                                <li class="list-inline-item">Event</li>
                             </ul>
                         </div>
                     </div>
@@ -66,7 +71,7 @@
                                                         </button>
                                                         <button class="item" id="dele_btn-@events.Id" data-toggle="modal" data-target="#delete-modal" onclick="javascript: delete_id(this)" data-placement="top" data-id=@events.Id title="Delete">
                                                             <i class="zmdi zmdi-delete"></i>
-                                                        </button>                                                       
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>

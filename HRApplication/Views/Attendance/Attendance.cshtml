@@ -1,4 +1,9 @@
-﻿<section class="au-breadcrumb m-t-75">
+﻿@{
+    ViewData["Title"] = "Cart";
+    ViewData["Notif"] = ViewBag.Notif;
+    ViewData["Name"] = ViewBag.Name;
+}
+<section class="au-breadcrumb m-t-75">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
             <div class="row">
@@ -8,7 +13,7 @@
                             <span class="au-breadcrumb-span">You are here:</span>
                             <ul class="list-unstyled list-inline au-breadcrumb__list">
                                 <li class="list-inline-item active">
-                                    <a href="#">Home</a>
+                                    <a asp-action="Index" asp-controller="Home">Home</a>
                                 </li>
                                 <li class="list-inline-item seprate">
                                     <span>/</span>
@@ -24,17 +29,17 @@
 </section>
 <section>
     <div class="section__content section__content--p30">
-        <button class="au-btn au-btn-icon au-btn--green au-btn--small" id="dele_btn-" data-toggle="modal" data-target="#contact-modal" data-placement="top" title="Delete">
+        <button class="au-btn au-btn-icon au-btn--green au-btn--small" id="dele_btn-" data-toggle="modal" data-target="#contact-modal" data-placement="top">
             <i class="zmdi zmdi-delete"></i>Clock In
         </button>
-        <button class="au-btn au-btn-icon au-btn--green au-btn--small" id="dele_btn-" data-toggle="modal" data-target="#clockout-modal" data-placement="top" title="Delete">
+        <button class="au-btn au-btn-icon au-btn--green au-btn--small" id="dele_btn-" data-toggle="modal" data-target="#clockout-modal" data-placement="top">
             <i class="zmdi zmdi-delete"></i>Clock Out
         </button>
         <div class="container-fluid p-t-30">
             <div class="row">
                 <div class="col-lg-6">
-                    <div class="table-responsive table--no-card m-b-30">
-                        <table class="table table-borderless table-striped table-earning">
+                    <div class="table-responsive table--no-card m-b-30" id="nav-home">
+                        <table id="permanent_table" class="table table-borderless table-striped table-earning">
                             <thead>
                                 <tr>
                                     <th>Employee</th>
@@ -42,28 +47,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @{
-                                    @foreach (var emp in ViewBag.EmpIn)
+                                @{ 
+                                    @foreach(var x in ViewBag.Absence)
                                     {
-                                        @foreach (var e in emp)
-                                        {
                                 <tr>
-                                    <td><a href="https://192.168.17.39:5001/Attendance/Attendance/@e.Id">@e.Fullname</a></td>
-                                    <td style="background-color:limegreen;color:azure">Hadir Masuk</td>
-                                </tr>
-                                        }
-                                        
+                                    <td><a href="https://192.168.17.39:5001/Attendance/Attendance/@x.Id">@x.Fullname</a></td>
+                                    @if (x.Status == "Hadir")
+                                    {
+                                        <td style="background-color:limegreen;color:white">@x.Status</td>
                                     }
-                                    @foreach (var empout in ViewBag.EmpOut)
+                                    @if (x.Status == "Belum Hadir")
                                     {
-                                        @foreach(var em in empout)
-                                        {
-                                <tr>
-                                    <td><a href="https://192.168.17.39:5001/Attendance/Attendance/@em.Id">@em.Fullname</a></td>
-                                    <td style="background-color:red;color:azure">Belum Absen</td>
+                                        <td style="background-color:red;color:white">@x.Status</td>
+                                    }
+
                                 </tr>
-                                        }
-                                        
                                     }
                                 }
                             </tbody>
@@ -95,7 +93,7 @@
                     </div>
                     <div class="form-group">
                         <input class="form-control" type="datetime-local" name="clockin" />
-                    </div>                    
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -164,3 +162,28 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#permanent_table').after('<div class="text-center pagination" id="nav-home"></div>');
+        var rowsShown = 5;
+        var rowsTotal = $('#permanent_table tbody tr').length;
+        var numPages = rowsTotal / rowsShown;
+        for (i = 0; i < numPages; i++) {
+            var pageNum = i + 1;
+            $('#nav-home').append('<a class="text-center" style="text-align:center" href="#" rel="' + i + '">' + pageNum + '</a> ');
+        }
+        $('#permanent_table tbody tr').hide();
+        $('#permanent_table tbody tr').slice(0, rowsShown).show();
+        $('#nav-home a:first').addClass('active');
+        $('#nav-home a').bind('click', function () {
+
+            $('#nav-home a').removeClass('active');
+            $(this).addClass('active');
+            var currPage = $(this).attr('rel');
+            var startItem = currPage * rowsShown;
+            var endItem = startItem + rowsShown;
+            $('#permanent_table tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                css('display', 'table-row').animate({ opacity: 1 }, 300);
+        });
+    });
+</script>

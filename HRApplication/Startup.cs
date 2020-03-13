@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using HRApplication.Data;
@@ -74,7 +75,26 @@ namespace HRApplication
             if (env.IsDevelopment())
             {
                 //app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/Login");
                 //app.UseStatusCodePagesWithReExecute("/Login");
+                /*using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = client.Get(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine(response.StatusCode.ToString());
+                    }
+                    else
+                    {
+                        // problems handling here
+                        Console.WriteLine(
+                            "Error occurred, the status code is: {0}",
+                            response.StatusCode
+                        );
+                    }
+                }*/
+
             }
             else
             {

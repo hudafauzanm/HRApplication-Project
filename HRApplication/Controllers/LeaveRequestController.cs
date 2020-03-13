@@ -52,6 +52,8 @@ namespace HRApplication.Controllers
             var emp = from e in AppDbContext.Employee select e;
             var lid = from e in AppDbContext.LeaveRequest where e.Status.Contains("pending") select e.Id;
             var notif = (from e in AppDbContext.LeaveRequest where e.Read_at == DateTime.Parse("0001-01-01 00:00:00.0000000") select e).Count();
+            var get = HttpContext.Session.GetString("Name");
+            ViewBag.Name = get;
             ViewBag.Notif = notif;
             ViewBag.Lid = lid;
             ViewBag.Emp = emp;

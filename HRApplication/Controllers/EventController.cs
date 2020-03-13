@@ -28,6 +28,8 @@ namespace HRApplication.Controllers
         {
             var events = from x in AppDbContext.Event select x;
             ViewBag.Event = events;
+            var get = HttpContext.Session.GetString("Name");
+            ViewBag.Name = get;
             return View("Event");
         }
 

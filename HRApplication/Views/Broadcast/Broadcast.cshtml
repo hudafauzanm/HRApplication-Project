@@ -1,4 +1,9 @@
-﻿<section class="au-breadcrumb m-t-75">
+﻿@{
+    ViewData["Title"] = "Cart";
+    ViewData["Notif"] = ViewBag.Notif;
+    ViewData["Name"] = ViewBag.Name;
+}
+<section class="au-breadcrumb m-t-75">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
             <div class="row">
@@ -8,12 +13,12 @@
                             <span class="au-breadcrumb-span">You are here:</span>
                             <ul class="list-unstyled list-inline au-breadcrumb__list">
                                 <li class="list-inline-item active">
-                                    <a href="#">Home</a>
+                                    <a asp-action="Index" asp-controller="Home">Home</a>
                                 </li>
                                 <li class="list-inline-item seprate">
                                     <span>/</span>
                                 </li>
-                                <li class="list-inline-item">Attendance</li>
+                                <li class="list-inline-item">Broadcast</li>
                             </ul>
                         </div>
                     </div>
@@ -29,13 +34,13 @@
                 <div class="col-lg-6">
                     <div class="card">
                         <div class="card-header">
-                            <strong>Horizontal</strong> Form
+                            <strong>Broadcast</strong> Message
                         </div>
                         <div class="card-body card-block">
                             <form action="" method="post" class="form-horizontal">
                                 <div class="row form-group">
                                     <div class="col col-md-3">
-                                        <label for="hf-email" class=" form-control-label">Email</label>
+                                        <label for="hf-email" class=" form-control-label">Announcement</label>
                                     </div>
                                     <div class="col-12 col-md-9">
                                         <textarea name="Message" id="Message" rows="9" placeholder="Enter Message....." class="form-control"></textarea>
@@ -51,9 +56,9 @@
                                 </div>
                             </form>
                         </div>
-                        
+
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
 </section>

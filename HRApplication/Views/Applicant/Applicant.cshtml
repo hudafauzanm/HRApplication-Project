@@ -1,4 +1,9 @@
-﻿<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+﻿@{
+    ViewData["Title"] = "Cart";
+    ViewData["Notif"] = ViewBag.Notif;
+    ViewData["Name"] = ViewBag.Name;
+}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!-- BREADCRUMB-->
 <section class="au-breadcrumb m-t-75">
     <div class="section__content section__content--p30">
@@ -10,7 +15,7 @@
                             <span class="au-breadcrumb-span">You are here:</span>
                             <ul class="list-unstyled list-inline au-breadcrumb__list">
                                 <li class="list-inline-item active">
-                                    <a href="#">Home</a>
+                                    <a asp-action="Index" asp-controller="Home">Home</a>
                                 </li>
                                 <li class="list-inline-item seprate">
                                     <span>/</span>
@@ -39,23 +44,23 @@
                     </nav>
                     <!-- DATA TABLE -->
                     <div class="tab-content" id="nav-tabContent">
-                        <div class="table-data__tool p-t-10">                            
-                            <div class="table-data__tool-right">
+                        <div class="table-data__tool p-t-10">
+                            <div class="table-data_tool">
                                 <a asp-controller="Applicant" asp-action="Add" class="au-btn au-btn--green au-btn--small">
                                     <i class="zmdi zmdi-plus"></i>add new applicant
                                 </a>
                             </div>
-                            <div class="table-data__tool-right">
+                            <div class="table-data__tool">
                                 <a asp-controller="Applicant" asp-action="ExportAll" class="au-btn au-btn-icon au-btn--green au-btn--small">
                                     <i class="zmdi zmdi-case-download"></i>Export CSV (All)
                                 </a>
                             </div>
-                            <div class="table-data__tool-right">
+                            <div class="table-data__tool">
                                 <a asp-action="ImportTemp" asp-controller="Applicant" class="au-btn au-btn-icon au-btn--green au-btn--small">
                                     <i class="zmdi zmdi-case-download"></i>Template
                                 </a>
                             </div>
-                            <div class="table-data__tool-right">
+                            <div class="table-data__tool upload-btn-wrapper">
                                 <form asp-action="Import" asp-controller="Applicant" method="post" enctype="multipart/form-data">
                                     <input type="file" name="Upload" value="Upload">
                                     <button type="submit" class="btn btn-success">Import</button>
@@ -63,7 +68,7 @@
                             </div>
                         </div>
                         <div class="table-data__tool">
-                            <div class="table-data__tool-right">
+                            <div class="table-data__tool">
                                 <div class="rs-select2--light rs-select2--sm">
                                     <div class="rs-select2--light rs-select2--sm">
                                         <input class="js-select2" id="myInput" type="text" placeholder="Search..">
@@ -71,7 +76,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="table-data__tool-right">
+                            <div class="table-data__tool">
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Export

@@ -39,6 +39,8 @@ namespace HRApplication.Controllers
             ViewBag.Contract = contract;
             ViewBag.Permanent = permanent;
             ViewBag.Probation = probation;
+            var get = HttpContext.Session.GetString("Name");
+            ViewBag.Name = get;
             return View("Employee");
         }
         public FileResult ExportAll()

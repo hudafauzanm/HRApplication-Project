@@ -1,4 +1,9 @@
-﻿<div class="main-content">
+﻿@{
+    ViewData["Title"] = "Cart";
+    ViewData["Notif"] = ViewBag.Notif;
+    ViewData["Name"] = ViewBag.Name;
+}
+<div class="main-content">
     <div class="section__content section__content--p30">
         <div class="container-fluid">
             <div class="row">
@@ -180,7 +185,7 @@
                                                                 <label for="email-input" class=" form-control-label">Email</label>
                                                             </div>
                                                             <div class="col-12 col-md-9">
-                                                                <input type="email" id="Email" name="Email" placeholder="Enter Email" class="form-control" value="@app.Email" >
+                                                                <input type="email" id="Email" name="Email" placeholder="Enter Email" class="form-control" value="@app.Email">
 
                                                             </div>
                                                         </div>
@@ -310,7 +315,7 @@
                                         </form>
                                     }
                                 </div>
-                                
+
                             }
                         }
 
@@ -335,5 +340,4 @@
         }
     }
 </script>
-            
-                
+

@@ -29,6 +29,8 @@ namespace HRApplication.Controllers
         {
             var notif = (from e in AppDbContext.LeaveRequest where e.Read_at == DateTime.Parse("0001-01-01 00:00:00.0000000") select e).Count();
             ViewBag.Notif = notif;
+            var get = HttpContext.Session.GetString("Name");
+            ViewBag.Name = get;
             return View("Broadcast");
         }
 

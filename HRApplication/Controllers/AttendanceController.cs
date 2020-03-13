@@ -30,35 +30,44 @@ namespace HRApplication.Controllers
             List<string> empatt = new List<string>();
             List<IQueryable> empmasuk = new List<IQueryable>();
             List<IQueryable> empabsn = new List<IQueryable>();
+            List<Absence> absence = new List<Absence>();
+            var employee = from x in AppDbContext.Employee select x;
+            foreach(var x in employee)
+            {
+                Absence absences = new Absence
+                {
+                    Id = Convert.ToString(x.Id),
+                    Fullname = x.Fullname,
+                    Status = "Belum Hadir"
+                };
+                absence.Add(absences);
+            }
             var attendance = from att in AppDbContext.Attendance where att.Clockin.Date == DateTime.Today.Date select att.EmployeeId;
             foreach(var x in attendance)
             {
                 empatt.Add(x);
             }
-            if(empatt.Count() == 0)
+            foreach (var x in empatt)
             {
-                var empout = from e in AppDbContext.Employee select e;
-                empabsn.Add(empout);
+                var empin = from e in AppDbContext.Employee where e.Id == Guid.Parse(x) select e.Fullname;
+                empmasuk.Add(empin);
             }
-            else
+            foreach(var y in empmasuk)
             {
-                foreach (var x in empatt)
+                foreach(var emps in y)
                 {
-                    var empout = from e in AppDbContext.Employee where e.Id != Guid.Parse(x) select e;
-                    empabsn.Add(empout);
-                }
-                foreach (var x in empatt)
-                {
-                    var empin = from e in AppDbContext.Employee where e.Id == Guid.Parse(x) select e;
-                    empmasuk.Add(empin);
-                }
-            }
-            
+                    var data = (from d in absence where d.Fullname == Convert.ToString(emps) select d).First();
+                    data.Status = "Hadir";
+                }                
+            }            
             var notif = (from e in AppDbContext.LeaveRequest where e.Read_at == DateTime.Parse("0001-01-01 00:00:00.0000000") select e).Count();
             ViewBag.Notif = notif;
             ViewBag.Emp = emp;
             ViewBag.EmpIn = empmasuk;
             ViewBag.EmpOut = empabsn;
+            ViewBag.Absence = absence;
+            var get = HttpContext.Session.GetString("Name");
+            ViewBag.Name = get;
 
             return View("Attendance");
         }
@@ -125,7 +134,6 @@ namespace HRApplication.Controllers
                 }
                 else
                 {
-                    Console.WriteLine(clockout.TimeOfDay);
                     var idedit = Guid.Parse(id);
                     if (clockout.TimeOfDay > TimeSpan.Parse("19:00:00") )
                     {
@@ -201,6 +209,13 @@ namespace HRApplication.Controllers
             {
                 return View();
             }
+        }
+
+        public class Absence
+        {
+            public string Id { get; set; }
+            public string Fullname { get; set; }
+            public string Status { get; set; }
         }
     }
 }

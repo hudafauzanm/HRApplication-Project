@@ -82,6 +82,7 @@ namespace HRApplication.Controllers
                         var token = GenerateJwtToken(user);
                         HttpContext.Session.SetString("JWTToken", token);
                         HttpContext.Session.SetString("Id", user.Id.ToString());
+                        HttpContext.Session.SetString("Name", user.Username.ToString());
                         var get = HttpContext.Session.GetString("JWTToken");
                         return RedirectToAction("Index","Home");
                     }

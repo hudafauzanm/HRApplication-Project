@@ -30,8 +30,10 @@ namespace HRApplication.Controllers
             var notif = (from e in AppDbContext.LeaveRequest where e.Read_at == DateTime.Parse("0001-01-01 00:00:00.0000000") select e).Count();
             var outs = (from e in AppDbContext.LeaveRequest where e.LeaveTime.Date == DateTime.Today.Date && e.Status == "approve" select e).Count();
             var attendance = (from e in AppDbContext.Attendance where e.Clockin.Date == DateTime.Today.Date select e).Count();
-            var applicant = from x in AppDbContext.Applicant where x.Status.Contains("unprocessed") select x;
+            var applicant = from x in AppDbContext.Applicant where x.Status.Contains("unprocessed") && x.Move_at == DateTime.Parse("0001-01-01 00:00:00.0000000") select x;
             var eventual = from x in AppDbContext.Event where x.TimeEvent.Date >= DateTime.Today.Date && x.TimeEvent.Year == DateTime.Today.Year orderby x.TimeEvent ascending select x;
+            var get = HttpContext.Session.GetString("Name");
+            ViewBag.Name = get;
             ViewBag.Event = eventual;
             ViewBag.Appl = applicant;
             ViewBag.Out = outs;

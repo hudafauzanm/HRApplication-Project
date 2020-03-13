@@ -36,6 +36,8 @@ namespace HRApplication.Controllers
             ViewBag.Un = unprocessed;
             ViewBag.Pro = process;
             ViewBag.Inter = interview;
+            var get = HttpContext.Session.GetString("Name");
+            ViewBag.Name = get;
             return View("Applicant");
         }
 
